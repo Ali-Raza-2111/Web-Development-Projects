@@ -1,0 +1,243 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+}
+a{
+    color: #294B67;
+}
+.navbar{
+    height: 60px;
+    width: 100%;
+    background-color: #131921;
+    display: flex;
+    align-items: center;
+}
+.logo{
+    height: 50px;
+    width: 100px;
+    background-color: #131921;
+    /* background-color: white; */
+}
+
+.logo img:hover{
+    border: 5px solid white;
+}
+.loaction{
+    color: white;
+    margin-left: 20px;
+    width: 100px;
+    height: 50px;
+    line-height: 1.5rem;
+}
+.loaction p {
+    padding-left: 20px;
+}
+.loaction i{
+   position: absolute;
+   top: 20px;
+   color:  white;
+   font-size: 1.3rem;
+}
+
+.loaction:hover{
+    border: 3px solid  white;
+
+}
+
+.search{
+    height: 40px;
+    width: 600px;
+    /* background-color: white; */
+    margin-left: 10px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.dropdown select{
+    height: 40px;
+    width: 50px;
+    border-radius: 5px;
+    background-color: #D4D4D4;
+}
+
+.bar{
+    width: 100%;
+}
+.bar input{
+    border-radius: 5px;
+    width: 510px;
+    height: 35px;
+}
+.searchbutton{
+    background-color: #FEBD69;
+    width: 44px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   font-size: 1.5rem;
+   border-radius: 5px;
+}
+
+.country{
+    width: 50px;
+    height: 40px;
+    margin-left: 20px;
+    color: white;
+    padding-top: 10px;
+    display: flex;
+    align-items: center;
+}
+.country:hover{
+    border: 2px solid  white;
+}
+
+.SignIn{
+    color: white;
+    margin-left: 30px;
+}
+.SignIn:hover{
+    border: 2px solid  white;
+}
+.returns{
+    color: white;
+    margin-left: 30px;
+}
+.returns:hover{
+    border: 2px solid  white;
+}
+.cart{
+    height: 40px;
+    color: white;
+    margin-left: 30px;
+    display: flex;
+    justify-content: center;    
+    align-items: center;
+}
+.cart:hover{
+    border: 2px solid  white;
+}
+
+.menu{
+    width: 100%;
+    height: 39px;
+    background-color: #232F3E;
+    color: white;
+    display: flex;
+    
+    /* justify-content: center; */
+}
+.menu ul{
+    display: flex;
+    list-style-type:none;
+    align-items: center;
+}
+.menu ul li{
+    height: 39px;
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+.menu ul li:hover{
+    border: 2px solid white;
+}
+
+.content{
+    height: 500px;
+    width: 100%;
+    background-image: url(./Assets/Beauty\ Products.jpg);
+    background-size: cover;
+    display: flex;
+    justify-content: space-evenly;
+    
+}
+
+.box{
+    padding-top: 30px;
+    padding-left: 10px;
+    width: 290px;
+    height: 415px;
+    /* border: 2px solid black; */
+    position: relative;
+    top: 250px;
+    background-color: white;
+}
+.img1{
+    margin-top: 10px;
+    width: 270px;
+    height: 80%;
+    background-image: url("./Assets/box\ 1.jpg");
+    background-size: cover;
+    margin-bottom: 30px;
+}
+
+.grid{
+    display: grid;
+    grid-template-rows: 150px 150px;
+    grid-template-columns: 150px 150px;
+    justify-content: center;   
+    padding-left: 25px; 
+    margin: 30px;
+}
+
+.img2{
+    margin-top: 10px;
+    width: 270px;
+    height: 80%;
+    background-image: url("./Assets/Toys.jpg");
+    background-size: cover;
+    margin-bottom: 30px;
+}
+.img3{
+    margin-top: 10px;
+    width: 270px;
+    height: 80%;
+    background-image: url("./Assets/PC.jpg");
+    background-size: cover;
+    margin-bottom: 30px;
+}
+.devices img{
+    margin-bottom: 30px;
+
+}
+
+.new{
+    height: 500px;
+    width: 100%;
+    background-size: cover;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.backToTop{
+    height: 50px;
+    width: 100%;
+    background-color: #485769;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.lists{
+    background-color: #232F3E;
+    height: 500px;
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    
+}
+.lists ul{
+    margin-top: 50px;
+}
+.lists li{
+    list-style: none;
+    padding-bottom: 20px;
+    font-size: 12px;
+}
+
+.Heading{
+    font-size: 30px;
+    font-weight: 700;
+}
