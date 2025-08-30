@@ -2,7 +2,6 @@ export function ProductCard({
   product,
   background = "slategray",
   OnPurchase,
-  ...restProps
 }) {
   return (
     <article
@@ -16,7 +15,7 @@ export function ProductCard({
       }}
     >
       <h2>{product.title}</h2>
-      <img src={product.imageSrc} alt={product.title} {...restProps} />
+      <img src={product.imageSrc} alt={product.title} width={158} height={128}/>
       <p>Specification:</p>
       <ul style={{ listStyle: "none", padding: 0 }}>
         <li>{product.specification[0]}</li>

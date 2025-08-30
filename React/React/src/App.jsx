@@ -46,20 +46,25 @@ function handlePurchase(product) {
 
   return (
     <div className="App">
-
+     {products.map((product) => (
+          <ProductCard
+            key={product.title}
+            product={product}
+            onPurchase={handlePurchase}
+          />
+        ))}
+        
       <ProductList>
-        <ProductCard width="96px"
-          height="96px"
+        <ProductCard 
           background="darkolivegreen"
           product={products[0]}
           OnPurchase={handlePurchase}
            />
 
 
-        <ProductCard idth="64px" height="64px" product={products[1]} OnPurchase={handlePurchase}/>
+        <ProductCard  product={products[1]} OnPurchase={handlePurchase}/>
 
-        <ProductCard width="128px"
-          height="128px"
+        <ProductCard 
           background="peru"
           product={products[2]}
           OnPurchase={handlePurchase} />
