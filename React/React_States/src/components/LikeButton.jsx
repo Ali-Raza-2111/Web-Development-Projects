@@ -15,9 +15,6 @@ export default function LikeButton() {
 
                 }
             </span>
-             
-                
-    
         </h2>
     );
 }
