@@ -20,17 +20,19 @@ let deleteTodo = (id) =>{
     }
     return(
         <div>
-            <input type="text" placeholder="Enter your task" value={newtodo} onChange={updateTodo}/>
-            <br />
+            <h1 style={{color:'#FFD700'}}>TaskTrack</h1>
+            <h4 style={{color:'#AAAAFF'}}>Because every task counts.</h4>
+            <input type="text" placeholder="Enter your task" value={newtodo} onChange={updateTodo} style={{width:'200px', height:'30px', borderRadius:'10px'}}/>
+            <br /> <br />
             <button onClick={addNewTask}>Add Task</button>
             <br /><br /><br />
             <hr />
-            <h3>TO DO LIST</h3>
+            <h3>Tasks</h3>
             <ul>
                 {
                     todo.map((tod) => (
                         
-                        <li key={tod.id}><span>{tod.task}</span> <span><button onClick={()=>deleteTodo(tod.id)}>Delete</button></span></li>
+                        <li key={tod.id} style={{margin:"10px"}}><span>{tod.task}</span> <span><button onClick={()=>deleteTodo(tod.id)}>Delete</button></span></li>
 
                     ))
                 }
