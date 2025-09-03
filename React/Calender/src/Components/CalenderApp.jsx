@@ -1,6 +1,8 @@
 import React from 'react'
 
 function CalenderApp() {
+  const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+  const monthOfYear = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   return (
     <div className='calender-app'>
       <div className='calender'>
@@ -25,7 +27,7 @@ function CalenderApp() {
         <div className="days">
             <span>1</span>
             <span>2</span>
-            <span>3</span>
+            <span className='current-date'>3</span>
             <span>4</span>
             <span>5</span>
             <span>6</span>
@@ -54,13 +56,35 @@ function CalenderApp() {
             <span>29</span>
             <span>30</span>
             <span>31</span>
-        </div>
-        <div className="events">
+        </div> 
+      </div>
+
+
+      <div className="events">
             <div className="event-popup">
-                
+                <div className="time-input">
+                  <div className="event-popup-time">Time</div>
+                  <input type="number" name='hours' min={0} max={24} className='hours' />
+                  <input type="number" name='minutes' min={0} max={60} className='minutes' />
+                </div>
+                <textarea placeholder='Enter Event Text (Max 60 characters)'></textarea>
+                <button className="event-popup-btn">Add Event</button>
+                <button className='close-event-popup'>
+                  <i className='bx bx-x'></i>
+                </button>
+            </div>
+            <div className="event">
+              <div className="event-date-wrapper">
+                <div className="event-date">May 15,2025</div>
+                <div className="event-time">10:00 AM</div>
+              </div>
+              <div className="event-text">Meeting with Ali</div>
+              <div className="event-buttons">
+                <i className="bx bxs-edit-alt"></i>
+                <i className="bx bxs-message-alt-x"></i>
+              </div>
             </div>
         </div>
-      </div>
     </div>
   )
 }
