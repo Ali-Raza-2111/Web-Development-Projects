@@ -19,4 +19,11 @@ html{
     align-items: center;
     justify-content: center;
     perspective: 100rem;
+    overflow: hidden;
+}
+
+@media (max-width:500px){
+    html{
+        font-size: 55%;
+    }
 }
