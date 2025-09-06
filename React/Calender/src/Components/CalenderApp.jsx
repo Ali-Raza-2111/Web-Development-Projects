@@ -77,9 +77,7 @@ function CalenderApp() {
   }
 
   const handleDeleteEvent = (eventId) => {
-    const updatedEvents = events.filter((event) =>{
-      event.id !== eventId
-    })
+    const updatedEvents = events.filter(event => event.id !== eventId)
 
     setEvents(updatedEvents)
   }
@@ -152,7 +150,7 @@ function CalenderApp() {
               <div className="event-text">{event.text}</div>
               <div className="event-buttons">
                 <i className="bx bxs-edit-alt" onClick={() =>handleEditEvent(event)}></i>
-                <i className="bx bxs-message-alt-x" onClick={() =>handleDeleteEvent(event.id)}></i>
+                <i className="bx bxs-message-alt-x" onClick={()=>handleDeleteEvent(event.id)}></i>
               </div>
             </div>  
               ))
