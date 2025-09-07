@@ -152,3 +152,68 @@
     top: 30%;
    
 }
+
+
+.favourites{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(to left,#1b9b96,#2e6f79);
+    padding: 6rem 7rem 3rem 3rem;
+}
+
+.fav-quote{
+    display: flex;
+    column-gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-close{
+    position: absolute;
+    top: 3rem;
+    right: 2rem;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-close i{
+    font-size: 3rem ;
+    color: #fff ;
+    
+}
+.btn-close i:active{
+    transform: translateY(0.1rem);
+}
+
+
+.fav-quote-delete{
+    font-size: 2.5rem;
+    color: #f06b5f;
+    cursor: pointer;
+}
+
+.fav-quote-delete i:active{
+    transform: translateY(0.1rem);
+}
+
+.fav-quote-text{
+    font-size: 1.6rem;
+    color: #fff;
+}
+
+
+
+.fav-quote-author{
+    font-family: sans-serif;
+    text-align: right;
+    color: #ddd;
+}
+
+@media (max-width:850px){
+    .quote-app{
+        width: 75vmin;
+        aspect-ratio: ;
+    }
+}
