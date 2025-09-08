@@ -1,6 +1,6 @@
-import React from "react";
 import logo from "../assets/Amazon Navbar Logo.png";
 import "./NavBar.css";
+import flag from '../assets/American Flag icon.png';
 function NavBar() {
   return (
     <div className="Nav-Bar">
@@ -9,7 +9,7 @@ function NavBar() {
       </div>
       <div className="nav-location">
         <div className="location-icon">
-          <i class="fa-solid fa-location-dot"></i>
+          <i className="fa-solid fa-location-dot"></i>
           <div className="location-text">
             <p>Deliver to </p>
             <span>Pakistan</span>
@@ -37,10 +37,13 @@ function NavBar() {
         </button>
       </div>
 
-      <div className="nav-language">EN</div>
+      <div className="nav-language">
+        <img src={flag} alt="flag" />
+        <p>EN</p></div>
+
       <div className="nav-sign-in">
         <p>Hello,Sign in </p>
-        <p>Accounts & Lists</p>
+        <p style={{ fontWeight: "bold" }}>Accounts & Lists</p>
       </div>
       <div className="nav-return-orders">Returns & Orders</div>
       <div className="nav-cart">

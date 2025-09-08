@@ -1,0 +1,26 @@
+.nav-list-bar{
+    width: 100%;
+    height: 4rem;
+    background-color: #232F3E;
+}
+
+.nav-list{
+    list-style-type: none;
+    display: flex;
+    font-size: 2rem;
+    color:white;
+    display: flex;
+    
+    align-items: center;
+    
+}
+
+.nav-list li{
+    display: flex;
+    padding-top: 0.7rem;
+    margin-right: 2rem;
+}
+
+.nav-list li:hover{
+    border: 2px solid white;
+}
