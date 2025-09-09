@@ -1,0 +1,10 @@
+.cards{
+    width: 100%;
+    background-color: transparent;
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 2rem;
+    column-gap: 1.3rem;
+    position: absolute;
+    top: 35rem;
+}

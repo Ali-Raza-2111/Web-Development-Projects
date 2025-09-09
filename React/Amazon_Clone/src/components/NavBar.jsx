@@ -33,7 +33,7 @@ function NavBar() {
         </select>
         <input type="text" className="nav-search" placeholder="Search Amazon"/>
         <button className="nav-search-btn">
-          <i class="fa-solid fa-magnifying-glass"></i>
+          <i className="fa-solid fa-magnifying-glass"></i>
         </button>
       </div>
 
