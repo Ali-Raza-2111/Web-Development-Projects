@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Query
 import requests
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
@@ -11,8 +11,8 @@ load_dotenv()
 
 api_key = os.getenv('API_KEY')
 @app.get('/weather')
-def get_weather():
-    url = f'https://api.openweathermap.org/data/2.5/weather?q=London&units=Metric&appid={api_key}'
+def get_weather(city: str = Query(..., description="City name")):
+    url = f'https://api.openweathermap.org/data/2.5/weather?q={city}&units=Metric&appid={api_key}'
     response = requests.get(url)
     data = response.json()
     return data
