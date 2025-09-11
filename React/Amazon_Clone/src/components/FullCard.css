@@ -22,3 +22,11 @@
     color: black;
     font-weight: bold;
 }
+
+.card-lower-text{
+    width:100%;
+    font-size: 1.7rem;
+    padding-left: 1rem;
+    color: #1C415E;
+    cursor: pointer;
+}

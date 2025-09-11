@@ -22,7 +22,6 @@ function QuoteGeneratorApp() {
     }
 
     const fetchNewQuote = async () => {
-    console.log("clicked")
   try {
     const response = await fetch("http://127.0.0.1:8000/quote")
     if (!response.ok) {
@@ -33,7 +32,8 @@ function QuoteGeneratorApp() {
       text: data.text,
       author: data.author
     })
-  } catch (error) {
+  } 
+  catch (error) {
     console.error("Failed to fetch quote:", error)
   }
 }
