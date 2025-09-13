@@ -5,6 +5,10 @@ import ImageSlider from './components/ImageSlider'
 import FullCard from './components/FullCard'
 import product from './components/FullCardsSource'
 import './App.css'
+import qproduct  from './components/QuadCardSource'
+import QuadCard from './components/QuadCard'
+
+
 function App() {
   return (
     <>
@@ -17,6 +21,7 @@ function App() {
       <FullCard product={product[0]}/>
       <FullCard product={product[0]}/>
       <FullCard product={product[0]}/>
+      <QuadCard product={qproduct[0]}/>
     </div>
     </>
   )
