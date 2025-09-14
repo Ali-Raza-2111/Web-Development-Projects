@@ -23,6 +23,10 @@
     border: 0.1rem solid #ddd;
 }
 
+.border-line:hover{
+    border: 0.1rem solid #ddd;
+
+}
 .location-icon{
     margin-left: 2rem;
     width: 2rem;

@@ -41,13 +41,13 @@ function NavBar() {
         <img src={flag} alt="flag" />
         <p>EN</p></div>
 
-      <div className="nav-sign-in">
+      <div className="nav-sign-in border-line">
         <p>Hello,Sign in </p>
         <p style={{ fontWeight: "bold" }}>Accounts & Lists</p>
       </div>
-      <div className="nav-return-orders">Returns & Orders</div>
-      <div className="nav-cart">
-        <i class="fa-solid fa-cart-shopping"></i>
+      <div className="nav-return-orders border-line">Returns & Orders</div>
+      <div className="nav-cart border-line">
+        <i class="fa-solid fa-cart-shopping "></i>
         <p>Cart</p>
       </div>
     </div>

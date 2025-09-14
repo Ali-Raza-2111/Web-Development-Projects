@@ -1,4 +1,14 @@
 .quad-card-images img{
-    height: 10rem;
-    width: 10rem;
+    height: 12rem;
+    width: 12rem;
+    margin: 2rem;
+
+}
+
+
+
+.quad-card-title{
+    width: 80%;
+    height: 4rem;
+    font-size: 2rem;
 }
