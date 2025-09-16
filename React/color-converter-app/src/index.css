@@ -12,3 +12,9 @@
 html{
   font-size: 62.5%;
 }
+
+@media(max-width:500px){
+  html{
+    font-size: 50%;
+  }
+}
