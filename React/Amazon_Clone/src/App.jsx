@@ -18,9 +18,8 @@ function App() {
     <ImageSlider/>
     <div className="cards">
       <FullCard product={product[0]}/>
-      {/* <FullCard product={product[0]}/> */}
       <QuadCard product={qproduct[0]}/>
-      <FullCard product={product[0]}/>
+      <QuadCard product={qproduct[1]}/>
       <FullCard product={product[0]}/>
     </div>
     </>
