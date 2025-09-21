@@ -3,5 +3,9 @@
 *{
   font-family: 'prompt',sans-serif;
 }
+html::-webkit-scrollbar{
+  display: none;
+}
+
 
 @custom-variant dark (&:where(.dark, .dark *));

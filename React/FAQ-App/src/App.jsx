@@ -17,7 +17,7 @@ function App() {
       <div className='container mx-auto py-12'>
         <header className='text-center mb-12'>
           <h1 className='text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent inline-block'>FAQ Center</h1>
-          <p className='text-lg text-gray-600 max-w-2xl max-auto dark:text-gray-300'>Find Answers to the most common questions about Tailwind CSS and Web Development</p>
+        <p className='text-lg text-gray-600 max-w-2xl mx-auto dark:text-gray-300'>Find Answers to the most common questions about Tailwind CSS and Web Development</p>
         </header>
       </div>
       <FAQList toggleDarkMode={toggleDarkMode} darkMode = {darkMode}/>
