@@ -3,7 +3,10 @@ import FAQItem from './components/FAQItem'
 import FAQList from './components/FAQList'
 
 function App() {
-  const [darkMode,setDarkMode]=useState(false)
+  const [darkMode,setDarkMode]=useState(()=>{
+    const savedTheme = localStorage.getItem('darkMode')
+    return savedTheme?JSON.parse(savedTheme):false
+  })
   const toggleDarkMode=()=>{setDarkMode(!darkMode)}
   useEffect(()=>{
     if(darkMode){
@@ -11,6 +14,7 @@ function App() {
     }else{
       document.documentElement.classList.remove('dark')
     }
+    localStorage.setItem('darkMode',JSON.stringify(darkMode))
   },[darkMode])
   return (
     <div className='min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 transition-colors duration-300'>
