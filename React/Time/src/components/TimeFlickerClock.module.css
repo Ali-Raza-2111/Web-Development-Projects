@@ -1,0 +1,19 @@
+.time-flicker-clock {
+  /* CSS Variables for Customization */
+  --clock-text-color: #0f0; /* Default green LED color */
+  --clock-font-size: 4rem;
+  --clock-shadow-color: #0f0; /* Default shadow color matching text */
+
+  font-family: 'monospace', sans-serif;
+  font-size: var(--clock-font-size);
+  font-weight: bold;
+  color: var(--clock-text-color);
+  text-shadow: 0 0 10px var(--clock-shadow-color), 0 0 20px var(--clock-shadow-color), 0 0 30px var(--clock-shadow-color);
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #000;
+  border-radius: 5px;
+  text-align: center;
+  user-select: none;
+  transition: opacity 0.1s ease-out; /* Smooth transition for flicker effect */
+}
