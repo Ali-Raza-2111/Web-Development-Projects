@@ -1,0 +1,83 @@
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m refs/remotes/origin/001-split-flap-clock@{0}: update by push
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m refs/heads/001-split-flap-clock@{0}: branch: Created from a09d1ad
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m HEAD@{0}: checkout: moving from main to 001-split-flap-clock
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m HEAD@{1}: checkout: moving from 001-split-flap-clock to main
+[33mcfbd194[m HEAD@{2}: commit: Auth Form Completed
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m HEAD@{3}: checkout: moving from 001-digital-flip-clock to 001-split-flap-clock
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m refs/heads/001-digital-flip-clock@{0}: branch: Created from HEAD
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m HEAD@{4}: checkout: moving from main to 001-digital-flip-clock
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m refs/heads/main@{0}: pull: Fast-forward
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m refs/remotes/origin/main@{0}: pull: fast-forward
+[33ma09d1ad[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m001-split-flap-clock[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;31morigin/001-split-flap-clock[m[33m, [m[1;32mmain[m[33m, [m[1;32m001-digital-flip-clock[m[33m)[m HEAD@{5}: pull: Fast-forward
+[33m0153371[m refs/remotes/origin/main@{1}: update by push
+[33m0153371[m refs/heads/main@{1}: commit: Auth Form Completed
+[33m0153371[m HEAD@{6}: commit: Auth Form Completed
+[33mc16d42f[m refs/heads/main@{2}: pull: Fast-forward
+[33mc16d42f[m refs/remotes/origin/main@{2}: pull: fast-forward
+[33mc16d42f[m HEAD@{7}: pull: Fast-forward
+[33mde51edd[m refs/heads/main@{3}: pull: Fast-forward
+[33mde51edd[m refs/remotes/origin/main@{3}: pull: fast-forward
+[33mde51edd[m HEAD@{8}: pull: Fast-forward
+[33m497e59f[m refs/remotes/origin/main@{4}: update by push
+[33m497e59f[m refs/heads/main@{4}: commit: FAQ Center
+[33m497e59f[m HEAD@{9}: commit: FAQ Center
+[33mcdb97d4[m refs/remotes/origin/main@{5}: update by push
+[33mcdb97d4[m refs/heads/main@{5}: commit: Faq Center
+[33mcdb97d4[m HEAD@{10}: commit: Faq Center
+[33mb7c146b[m refs/remotes/origin/main@{6}: update by push
+[33mb7c146b[m refs/heads/main@{6}: commit: Color Converter App
+[33mb7c146b[m HEAD@{11}: commit: Color Converter App
+[33m1354e4c[m refs/remotes/origin/main@{7}: update by push
+[33m1354e4c[m refs/heads/main@{7}: commit: Color Converter
+[33m1354e4c[m HEAD@{12}: commit: Color Converter
+[33me0c7d14[m refs/remotes/origin/main@{8}: update by push
+[33me0c7d14[m refs/heads/main@{8}: commit: Quad Card Styling Completed
+[33me0c7d14[m HEAD@{13}: commit: Quad Card Styling Completed
+[33m287fc92[m refs/remotes/origin/main@{9}: update by push
+[33m287fc92[m refs/heads/main@{9}: commit: Amazon Project
+[33m287fc92[m HEAD@{14}: commit: Amazon Project
+[33m415c6a7[m refs/heads/main@{10}: pull: Fast-forward
+[33m415c6a7[m HEAD@{15}: pull: Fast-forward
+[33m415c6a7[m refs/remotes/origin/main@{10}: pull: fast-forward
+[33mc856640[m refs/remotes/origin/main@{11}: update by push
+[33mc856640[m refs/heads/main@{11}: commit: Cards Of Amazon Project
+[33mc856640[m HEAD@{16}: commit: Cards Of Amazon Project
+[33mff71c85[m refs/remotes/origin/main@{12}: update by push
+[33mff71c85[m refs/heads/main@{12}: commit: Slider Image Completed in Amazon Project
+[33mff71c85[m HEAD@{17}: commit: Slider Image Completed in Amazon Project
+[33m8cc9301[m refs/remotes/origin/main@{13}: update by push
+[33m8cc9301[m refs/heads/main@{13}: commit: Amazon Clone Started
+[33m8cc9301[m HEAD@{18}: commit: Amazon Clone Started
+[33mace2650[m refs/heads/main@{14}: pull: Fast-forward
+[33mace2650[m refs/remotes/origin/main@{14}: pull: fast-forward
+[33mace2650[m HEAD@{19}: pull: Fast-forward
+[33mb1c0b39[m refs/remotes/origin/main@{15}: update by push
+[33mb1c0b39[m refs/heads/main@{15}: commit: Rect Amazon Clone
+[33mb1c0b39[m HEAD@{20}: commit: Rect Amazon Clone
+[33m1fe65d6[m refs/heads/main@{16}: pull: Fast-forward
+[33m1fe65d6[m refs/remotes/origin/main@{16}: pull: fast-forward
+[33m1fe65d6[m HEAD@{21}: pull: Fast-forward
+[33me04e267[m refs/remotes/origin/main@{17}: update by push
+[33me04e267[m refs/heads/main@{17}: commit: Ludo Game
+[33me04e267[m HEAD@{22}: commit: Ludo Game
+[33mda729fa[m refs/remotes/origin/main@{18}: update by push
+[33mda729fa[m refs/heads/main@{18}: commit: TOdo List
+[33mda729fa[m HEAD@{23}: commit: TOdo List
+[33me69f5ab[m refs/remotes/origin/main@{19}: update by push
+[33me69f5ab[m refs/heads/main@{19}: commit: Learning States in React
+[33me69f5ab[m HEAD@{24}: commit: Learning States in React
+[33meb790da[m refs/remotes/origin/main@{20}: update by push
+[33meb790da[m refs/heads/main@{20}: commit: Amazon Cards
+[33meb790da[m HEAD@{25}: commit: Amazon Cards
+[33mb099c15[m refs/remotes/origin/main@{21}: update by push
+[33mb099c15[m refs/heads/main@{21}: commit: Responding to Events
+[33mb099c15[m HEAD@{26}: commit: Responding to Events
+[33m0fad458[m refs/remotes/origin/main@{22}: update by push
+[33m0fad458[m refs/heads/main@{22}: commit: Updated Folders
+[33m0fad458[m HEAD@{27}: commit: Updated Folders
+[33md6aff80[m refs/remotes/origin/main@{23}: update by push
+[33md6aff80[m refs/heads/main@{23}: commit: React Learning
+[33md6aff80[m HEAD@{28}: commit: React Learning
+[33mf175b90[m refs/heads/main@{24}: clone: from https://github.com/Ali-Raza-2111/Web-Development-Projects.git
+[33mf175b90[m refs/remotes/origin/HEAD@{0}: clone: from https://github.com/Ali-Raza-2111/Web-Development-Projects.git
+[33mf175b90[m HEAD@{29}: clone: from https://github.com/Ali-Raza-2111/Web-Development-Projects.git
