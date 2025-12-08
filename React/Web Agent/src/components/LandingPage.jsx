@@ -1,5 +1,38 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, createContext, useContext } from 'react';
 import './styles.css';
+
+// --- THEME CONTEXT ---
+const ThemeContext = createContext();
+
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
+  if (!context) {
+    throw new Error('useTheme must be used within ThemeProvider');
+  }
+  return context;
+};
+
+export const ThemeProvider = ({ children }) => {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme || 'light';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+};
 
 // --- HOOK: For Navbar Scroll Effect ---
 const useScrollPosition = () => {
@@ -109,6 +142,22 @@ const SimulatedChat = () => {
   );
 };
 
+// --- COMPONENT: Theme Toggle Button ---
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useTheme();
+  
+  return (
+    <button 
+      onClick={toggleTheme} 
+      className="theme-toggle-btn"
+      aria-label="Toggle theme"
+      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+    >
+      {theme === 'light' ? '🌙' : '☀️'}
+    </button>
+  );
+};
+
 // --- COMPONENT: NavBar ---
 const NavBar = () => {
   const isScrolled = useScrollPosition();
@@ -130,6 +179,7 @@ const NavBar = () => {
         <button onClick={() => scrollToSection('contact')} className="navbar-link">Contact</button>
       </nav>
       <div className="navbar-actions">
+        <ThemeToggle />
         <button className="login-button">Login</button>
       </div>
     </header>
@@ -163,14 +213,51 @@ const TestimonialCard = ({ name, role, feedback, index }) => {
     );
 };
 
-// --- COMPONENT: Chatbot Modal (NEW) ---
+// --- COMPONENT: Scroll to Top Button ---
+const ScrollToTop = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const toggleVisibility = () => {
+      if (window.pageYOffset > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+      }
+    };
+
+    window.addEventListener('scroll', toggleVisibility);
+    return () => window.removeEventListener('scroll', toggleVisibility);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  return (
+    <button
+      className={`scroll-to-top ${isVisible ? 'visible' : ''}`}
+      onClick={scrollToTop}
+      aria-label="Scroll to top"
+    >
+      ↑
+    </button>
+  );
+};
+
+// --- COMPONENT: Chatbot Modal (Enhanced) ---
 const ChatbotModal = ({ isOpen, onClose }) => {
   const [messages, setMessages] = useState([
     { role: 'agent', text: "Welcome to the Review Agent Pro demo! What product or service would you like to review today?" }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState(null);
   const messagesEndRef = useRef(null);
+  const inputRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -178,47 +265,83 @@ const ChatbotModal = ({ isOpen, onClose }) => {
 
   useEffect(scrollToBottom, [messages, isTyping]);
 
- const handleSendMessage = async (e) => { // NOTE: Made this function async
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+  // Focus input when modal opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen]);
 
-    const userMessage = { role: 'user', text: inputValue };
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsTyping(true);
+  // Keyboard shortcut: Escape to close
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
 
-    // Prepare the message history for the API call
-    const conversationHistory = [...messages, userMessage];
+  const handleSendMessage = async (e) => {
+    e.preventDefault();
+    if (!inputValue.trim() || isTyping) return;
 
-    try {
-      // --- API CALL to FastAPI Endpoint ---
-      const response = await fetch('http://localhost:8000/chat', { // NOTE: Update port if necessary
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ messages: conversationHistory }),
-      });
+    const userMessage = { role: 'user', text: inputValue };
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsTyping(true);
+    setError(null);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+    const conversationHistory = [...messages, userMessage];
 
-      const data = await response.json();
-      
-      const agentMessage = { role: 'agent', text: data.text };
-      
-      // Update state with the actual agent response
-      setMessages(prev => [...prev, agentMessage]);
-      
-    } catch (error) {
-      console.error("Error communicating with agent:", error);
-      const errorMessage = { role: 'agent', text: "Sorry, I'm having trouble connecting to the agent. Please try again later." };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages: conversationHistory }),
+        signal: controller.signal
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      const agentMessage = { role: 'agent', text: data.text };
+      setMessages(prev => [...prev, agentMessage]);
+      
+    } catch (error) {
+      console.error("Error communicating with agent:", error);
+      let errorText = "Sorry, I'm having trouble connecting. Please try again.";
+      
+      if (error.name === 'AbortError') {
+        errorText = "Request timed out. Please try again.";
+      } else if (!navigator.onLine) {
+        errorText = "No internet connection. Please check your network.";
+      }
+      
+      const errorMessage = { role: 'agent', text: errorText };
+      setMessages(prev => [...prev, errorMessage]);
+      setError(errorText);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleClearChat = () => {
+    setMessages([
+      { role: 'agent', text: "Welcome to the Review Agent Pro demo! What product or service would you like to review today?" }
+    ]);
+    setError(null);
+  };
   
   if (!isOpen) return null;
 
@@ -226,8 +349,21 @@ const ChatbotModal = ({ isOpen, onClose }) => {
     <div className="chatbot-modal-overlay" onClick={onClose}>
       <div className="chatbot-modal" onClick={(e) => e.stopPropagation()}>
         <div className="chatbot-header">
-          <h3>Review Agent Demo</h3>
-          <button onClick={onClose} className="close-btn">&times;</button>
+          <h3>
+            <span className="chat-status-indicator"></span>
+            Review Agent Demo
+          </h3>
+          <div className="chatbot-header-actions">
+            <button 
+              onClick={handleClearChat} 
+              className="clear-chat-btn"
+              title="Clear conversation"
+              aria-label="Clear chat"
+            >
+              🗑️
+            </button>
+            <button onClick={onClose} className="close-btn" aria-label="Close chat">&times;</button>
+          </div>
         </div>
         <div className="chatbot-messages">
           {messages.map((msg, index) => (
@@ -240,24 +376,34 @@ const ChatbotModal = ({ isOpen, onClose }) => {
               <span></span><span></span><span></span>
             </div>
           )}
+          {error && (
+            <div className="chatbot-error-banner">
+              ⚠️ {error}
+            </div>
+          )}
           <div ref={messagesEndRef} />
         </div>
         <form className="chatbot-input-form" onSubmit={handleSendMessage}>
           <input
+            ref={inputRef}
             type="text"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Type your message..."
-            autoFocus
+            placeholder="Type your message... (Press ESC to close)"
+            disabled={isTyping}
           />
-          <button type="submit">Send</button>
+          <button 
+            type="submit" 
+            disabled={isTyping || !inputValue.trim()}
+            className={isTyping ? 'sending' : ''}
+          >
+            {isTyping ? '...' : 'Send'}
+          </button>
         </form>
       </div>
     </div>
   );
 };
-
-
 // --- MAIN PAGE COMPONENT ---
 function LandingPage() {
   const heroTexts = ["Customer Reviews", "Sentiment Analysis", "Automated Support", "Data Collection"];
@@ -278,11 +424,14 @@ function LandingPage() {
 
   const [isChatOpen, setIsChatOpen] = useState(false);
   const openChat = () => setIsChatOpen(true);
-  const closeChat = () => setIsChatOpen(false);
+  const closeChat = () => {
+    setIsChatOpen(false);
+  };
 
   return (
-    <div className="App">
-      <NavBar />
+    <ThemeProvider>
+      <div className="App">
+        <NavBar />
 
       {/* Hero Section */}
       <section className="hero-section">
@@ -364,7 +513,9 @@ function LandingPage() {
       </footer>
 
       <ChatbotModal isOpen={isChatOpen} onClose={closeChat} />
+      <ScrollToTop />
     </div>
+    </ThemeProvider>
   );
 }
 
