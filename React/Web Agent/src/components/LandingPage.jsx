@@ -178,30 +178,47 @@ const ChatbotModal = ({ isOpen, onClose }) => {
 
   useEffect(scrollToBottom, [messages, isTyping]);
 
-  const handleSendMessage = (e) => {
-    e.preventDefault();
-    if (!inputValue.trim()) return;
+ const handleSendMessage = async (e) => { // NOTE: Made this function async
+    e.preventDefault();
+    if (!inputValue.trim()) return;
 
-    const userMessage = { role: 'user', text: inputValue };
-    setMessages(prev => [...prev, userMessage]);
-    setInputValue('');
-    setIsTyping(true);
+    const userMessage = { role: 'user', text: inputValue };
+    setMessages(prev => [...prev, userMessage]);
+    setInputValue('');
+    setIsTyping(true);
 
-    // Simulate agent response
-    setTimeout(() => {
-      const agentResponses = [
-        "Great! On a scale of 1 to 5, how would you rate it?",
-        "Thanks for sharing. What's one thing you'd improve?",
-        "Understood. Could you tell me a bit more about that?",
-        "Processing that... What was the most memorable part of your experience?"
-      ];
-      const randomResponse = agentResponses[Math.floor(Math.random() * agentResponses.length)];
-      
-      const agentMessage = { role: 'agent', text: randomResponse };
-      setMessages(prev => [...prev, agentMessage]);
-      setIsTyping(false);
-    }, 1500);
-  };
+    // Prepare the message history for the API call
+    const conversationHistory = [...messages, userMessage];
+
+    try {
+      // --- API CALL to FastAPI Endpoint ---
+      const response = await fetch('http://localhost:8000/chat', { // NOTE: Update port if necessary
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ messages: conversationHistory }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      const agentMessage = { role: 'agent', text: data.text };
+      
+      // Update state with the actual agent response
+      setMessages(prev => [...prev, agentMessage]);
+      
+    } catch (error) {
+      console.error("Error communicating with agent:", error);
+      const errorMessage = { role: 'agent', text: "Sorry, I'm having trouble connecting to the agent. Please try again later." };
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
   
   if (!isOpen) return null;
 
@@ -275,7 +292,7 @@ function LandingPage() {
             <TypingText texts={heroTexts} className="highlight-text" />
           </h1>
           <p className="hero-subtext">
-            Engage users, collect high-quality structured data, and instantly analyze feedback—all through our smart chat agent.
+            Engage users, collect high-quality structured data, and instantly analyze feedback. All through our smart chat agent.
           </p>
           <div className="hero-buttons">
             <button className="cta-button primary" onClick={openChat}>Try Demo</button>
