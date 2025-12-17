@@ -135,7 +135,7 @@ const SimulatedChat = () => {
           Category: <span className="tag-service">Ambiance</span>
         </div>
         <div className="message agent-msg slide-in-3">
-          I've logged this feedback in your dashboard.
+          ✨ Feedback logged to your dashboard!
         </div>
       </div>
     </div>
@@ -406,17 +406,17 @@ const ChatbotModal = ({ isOpen, onClose }) => {
 };
 // --- MAIN PAGE COMPONENT ---
 function LandingPage() {
-  const heroTexts = ["Customer Reviews", "Sentiment Analysis", "Automated Support", "Data Collection"];
+  const heroTexts = ["Customer Reviews", "Sentiment Analysis", "Smart Insights", "Data Collection"];
 
   const features = [
-    { icon: '💬', title: 'Interactive Chat', description: 'Guides users through a natural conversation to gather comprehensive feedback.' },
-    { icon: '💾', title: 'Auto-Storage', description: 'Reviews are instantly structured, validated, and pushed to your database.' },
-    { icon: '📊', title: 'Sentiment AI', description: 'Automatically determines tone (Positive, Negative, Neutral) in real-time.' },
+    { icon: '💬', title: 'Interactive Chat', description: 'Guides users through a natural conversation to gather comprehensive, structured feedback effortlessly.' },
+    { icon: '💾', title: 'Auto-Storage', description: 'Reviews are instantly validated, structured, and synced to your preferred database in real-time.' },
+    { icon: '🧠', title: 'Sentiment AI', description: 'Advanced AI determines tone and emotion (Positive, Negative, Neutral) with remarkable accuracy.' },
   ];
 
   const testimonials = [
-    { name: "Sarah J.", role: "Product Manager", feedback: "This agent completely changed how we handle user feedback. The data is so much cleaner now." },
-    { name: "Mike T.", role: "SaaS Founder", feedback: "Setting it up took 5 minutes. The sentiment analysis is surprisingly accurate." },
+    { name: "Sarah Johnson", role: "Product Manager at TechFlow", feedback: "This agent completely transformed how we handle user feedback. The data quality has improved dramatically." },
+    { name: "Mike Torres", role: "Founder, CloudStart", feedback: "Setup took just 5 minutes. The sentiment analysis is surprisingly accurate and saves us hours every week." },
   ];
 
   const [demoRef, demoVisible] = useOnScreen({ threshold: 0.3, triggerOnce: true });
@@ -441,11 +441,11 @@ function LandingPage() {
             <TypingText texts={heroTexts} className="highlight-text" />
           </h1>
           <p className="hero-subtext">
-            Engage users, collect high-quality structured data, and instantly analyze feedback. All through our smart chat agent.
+            Engage users, collect high-quality structured data, and instantly analyze feedback with AI-powered intelligence. All through our smart chat agent.
           </p>
           <div className="hero-buttons">
-            <button className="cta-button primary" onClick={openChat}>Try Demo</button>
-            <button className="cta-button secondary">Watch Video</button>
+            <button className="cta-button primary" onClick={openChat}>✨ Try Demo</button>
+            <button className="cta-button secondary">▶ Watch Video</button>
           </div>
         </div>
         
@@ -456,7 +456,7 @@ function LandingPage() {
 
       {/* Integrations Section */}
       <section id="integrations" className="logo-ticker-section">
-        <p>TRUSTED BY INNOVATIVE TEAMS</p>
+        <p>TRUSTED BY INNOVATIVE TEAMS WORLDWIDE</p>
         <div className="logo-ticker">
           <span>Notion</span>
           <span>•</span>
@@ -482,9 +482,9 @@ function LandingPage() {
       <section id="demo" ref={demoRef} className={`demo-section ${demoVisible ? 'is-visible' : ''}`}>
         <div className="demo-container">
           <h2>Ready to clear the noise?</h2>
-          <p>Experience the difference of structured AI feedback today.</p>
+          <p>Experience the power of AI-driven feedback collection today.</p>
           <div className="demo-chat-placeholder">
-             <button className="start-chat-btn" onClick={openChat}>Initialize Agent 🤖</button>
+             <button className="start-chat-btn" onClick={openChat}>✨ Initialize Agent</button>
           </div>
         </div>
       </section>
@@ -501,15 +501,17 @@ function LandingPage() {
       <section id="contact" ref={contactRef} className={`contact-section ${contactVisible ? 'is-visible' : ''}`}>
         <div className="contact-container">
           <h2>Get In Touch</h2>
+          <p className="hero-subtext" style={{margin: '0 auto', maxWidth: '500px'}}>Stay updated with the latest features and releases.</p>
           <form className="simple-form" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="Enter your email" />
-            <button type="submit">Subscribe for Updates</button>
+            <input type="email" placeholder="Enter your email address" />
+            <button type="submit">Subscribe ✨</button>
           </form>
         </div>
       </section>
 
       <footer className="footer">
-        © 2025 Review Agent Pro. Intelligent Feedback Collection.
+        <p>© 2025 Review Agent Pro. Intelligent Feedback Collection.</p>
+        <p style={{marginTop: '0.5rem', opacity: 0.7, fontSize: '0.85rem'}}>Built with 💜 for modern teams</p>
       </footer>
 
       <ChatbotModal isOpen={isChatOpen} onClose={closeChat} />
