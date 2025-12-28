@@ -5,14 +5,14 @@ import Tilt from '../ui/Tilt';
 import { animate, stagger } from 'animejs';
 
 const skills = [
-  { name: "Python", icon: SiPython },
-  { name: "JavaScript", icon: SiJavascript },
-  { name: "React", icon: SiReact },
-  { name: "FastAPI", icon: SiFastapi },
-  { name: "OpenAI", icon: SiOpenai },
-  { name: "PostgreSQL", icon: SiPostgresql },
-  { name: "MongoDB", icon: SiMongodb },
-  { name: "Git", icon: SiGit },
+  { name: "Python", icon: SiPython, color: "#3776AB" },
+  { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
+  { name: "React", icon: SiReact, color: "#61DAFB" },
+  { name: "FastAPI", icon: SiFastapi, color: "#009688" },
+  { name: "OpenAI", icon: SiOpenai, color: "#10A37F" },
+  { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
+  { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
+  { name: "Git", icon: SiGit, color: "#F05032" },
 ];
 
 const Skills = () => {
@@ -97,10 +97,13 @@ const Skills = () => {
           {skills.map((skill, index) => (
             <div key={index} className="opacity-0">
               <Tilt className="h-full">
-                <Card className="group hover:border-primary/50 transition-all duration-300 h-full bg-background/50 backdrop-blur-sm hover:shadow-[0_0_30px_-10px_rgba(255,255,255,0.1)]">
+                <Card 
+                  style={{ '--skill-color': skill.color }}
+                  className="group hover:border-[var(--skill-color)] transition-all duration-300 h-full bg-background/50 backdrop-blur-sm hover:shadow-[0_0_30px_-10px_var(--skill-color)]"
+                >
                   <CardContent className="p-6 flex flex-col items-center justify-center gap-4 aspect-square">
-                    <skill.icon size={40} className="text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                    <span className="font-medium">{skill.name}</span>
+                    <skill.icon size={40} className="text-muted-foreground group-hover:text-[var(--skill-color)] transition-colors duration-300" />
+                    <span className="font-medium group-hover:text-[var(--skill-color)] transition-colors duration-300">{skill.name}</span>
                   </CardContent>
                 </Card>
               </Tilt>

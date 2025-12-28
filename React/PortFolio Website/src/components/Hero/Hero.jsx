@@ -51,7 +51,7 @@ const Hero = () => {
         opacity: [0, 1],
         delay: stagger(50),
       }, '-=600')
-      .add(imageRef.current, {
+      .add('.hero-img-anim', {
         opacity: [0, 1],
         translateX: ['50px', '0px'],
         rotate: ['10deg', '0deg'],
@@ -81,7 +81,7 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto max-w-6xl">
-        <div className="grid md:grid-cols-2 gap-12 items-center">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="space-y-8 relative z-10">
             <div className="fade-in-up inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/10 bg-primary/5 backdrop-blur-sm text-xs font-medium text-primary/80 opacity-0 hover:bg-primary/10 transition-colors cursor-default">
               <span className="relative flex h-2 w-2">
@@ -91,13 +91,37 @@ const Hero = () => {
               Available for opportunities
             </div>
 
-            <h1 ref={nameRef} className="text-6xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.9] opacity-0">
-              Ali Raza
-            </h1>
-            
-            <h2 ref={titleRef} className="text-2xl md:text-4xl font-light text-muted-foreground max-w-2xl opacity-0">
-              Software Engineer <span className="text-foreground">&</span> AI Enthusiast
-            </h2>
+            <div className="flex flex-row items-center justify-between gap-6 md:block">
+              <div className="flex-1 space-y-3 md:space-y-8">
+                <h1 ref={nameRef} className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.9] opacity-0">
+                  Ali Raza
+                </h1>
+                
+                <h2 ref={titleRef} className="text-base sm:text-lg md:text-4xl font-light text-muted-foreground max-w-2xl opacity-0">
+                  Software Engineer <span className="text-foreground">&</span> AI Enthusiast
+                </h2>
+              </div>
+
+              {/* Mobile Image - Elegant Circular Avatar */}
+              <div className="relative flex-shrink-0 opacity-0 hero-img-anim md:hidden">
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28">
+                  {/* Outer Ring - Gradient */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/40 via-primary/20 to-transparent p-[2px]">
+                    <div className="w-full h-full rounded-full bg-background" />
+                  </div>
+                  {/* Image Container */}
+                  <div className="absolute inset-1 rounded-full overflow-hidden border-2 border-background shadow-xl">
+                    <img 
+                      src={profileImg} 
+                      alt="Ali Raza" 
+                      className="w-full h-full object-cover object-top"
+                    />
+                  </div>
+                  {/* Status Indicator */}
+                  <div className="absolute bottom-1 right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-background shadow-md" />
+                </div>
+              </div>
+            </div>
 
             <p ref={descRef} className="text-lg text-muted-foreground/80 max-w-xl leading-relaxed opacity-0">
               Crafting scalable backend systems and AI-powered applications with a focus on performance, elegance, and minimal design.
@@ -123,40 +147,60 @@ const Hero = () => {
               </div>
             </div>
 
-            <div ref={socialRef} className="flex gap-6 pt-8">
+            <div ref={socialRef} className="flex gap-4 pt-8">
               {[
-                { icon: Github, href: "https://github.com" },
-                { icon: Linkedin, href: "https://linkedin.com" },
-                { icon: Mail, href: "mailto:hello@aliraza.dev" }
+                { icon: Github, href: "https://github.com", color: "hover:bg-[#333] hover:text-white dark:hover:bg-white dark:hover:text-[#333]" },
+                { icon: Linkedin, href: "https://linkedin.com", color: "hover:bg-[#0A66C2] hover:text-white" },
+                { icon: Mail, href: "mailto:hello@aliraza.dev", color: "hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 hover:text-white" }
               ].map((social, index) => (
                 <a
                   key={index}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-foreground transition-colors opacity-0 hover:scale-110 transform duration-200"
+                  className={`w-12 h-12 rounded-full border border-border flex items-center justify-center text-muted-foreground transition-all duration-300 opacity-0 hover:scale-110 hover:border-transparent hover:shadow-lg ${social.color}`}
                 >
-                  <social.icon size={24} />
+                  <social.icon size={20} />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Image Column */}
-          <div className="relative hidden md:block">
-            <div ref={imageRef} className="relative w-full max-w-sm mx-auto aspect-[3/4] opacity-0">
-              <div className="relative w-full h-full rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
-                <div className="absolute inset-0 bg-primary/20 mix-blend-overlay z-10 transition-opacity duration-500 group-hover:opacity-0" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 opacity-60" />
-                <img 
-                  src={profileImg} 
-                  alt="Ali Raza" 
-                  className="w-full h-full object-cover grayscale contrast-125 brightness-90 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-105 group-hover:brightness-100"
-                />
+          {/* Image Column - Desktop Only */}
+          <div className="relative hidden md:flex items-center justify-center">
+            <div className="relative opacity-0 hero-img-anim group">
+              {/* Outer Animated Gradient Ring */}
+              <div className="absolute -inset-4 rounded-full bg-gradient-to-r from-primary/50 via-purple-500/30 to-pink-500/30 blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-700 animate-pulse" />
+              
+              {/* Decorative Orbiting Elements */}
+              <div className="absolute -inset-8 rounded-full border border-dashed border-primary/20 animate-[spin_20s_linear_infinite]" />
+              <div className="absolute -inset-12 rounded-full border border-dotted border-primary/10 animate-[spin_30s_linear_infinite_reverse]" />
+              
+              {/* Main Image Container */}
+              <div className="relative w-72 h-72 lg:w-80 lg:h-80">
+                {/* Gradient Border */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary via-purple-500/50 to-pink-500/50 p-[3px] shadow-2xl">
+                  <div className="w-full h-full rounded-full bg-background" />
+                </div>
+                {/* Image */}
+                <div className="absolute inset-2 rounded-full overflow-hidden border-4 border-background shadow-inner">
+                  <img 
+                    src={profileImg} 
+                    alt="Ali Raza" 
+                    className="w-full h-full object-cover object-top grayscale contrast-110 brightness-95 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:scale-110 group-hover:brightness-105"
+                  />
+                  {/* Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-40 group-hover:opacity-0 transition-opacity duration-500" />
+                </div>
+                {/* Status Badge */}
+                <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-background/90 backdrop-blur-sm px-3 py-1.5 rounded-full border border-primary/20 shadow-lg">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  <span className="text-xs font-medium text-primary">Available</span>
+                </div>
               </div>
-              {/* Decorative Elements */}
-              <div className="absolute -inset-4 border border-primary/20 rounded-2xl -z-10 translate-x-4 translate-y-4" />
-              <div className="absolute -inset-4 border border-white/5 rounded-2xl -z-20 -translate-x-4 -translate-y-4" />
             </div>
           </div>
         </div>

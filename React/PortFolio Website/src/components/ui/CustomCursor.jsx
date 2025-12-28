@@ -48,8 +48,8 @@ const CustomCursor = () => {
       animate(followerRef.current, {
         scale: isHovering ? 2.5 : 1,
         opacity: isHovering ? 0.5 : 0.3,
-        backgroundColor: isHovering ? 'var(--primary)' : 'transparent',
-        borderColor: isHovering ? 'transparent' : 'var(--primary)',
+        backgroundColor: isHovering ? '#ffffff' : 'transparent',
+        borderColor: isHovering ? 'transparent' : '#ffffff',
         duration: 300,
         easing: 'easeOutQuad'
       });
@@ -60,11 +60,11 @@ const CustomCursor = () => {
     <>
       <div 
         ref={cursorRef} 
-        className="fixed top-0 left-0 w-2 h-2 bg-primary rounded-full pointer-events-none z-[9999] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block"
+        className="fixed top-0 left-0 w-2 h-2 bg-white rounded-full pointer-events-none z-[9999] mix-blend-difference -translate-x-1/2 -translate-y-1/2 hidden md:block"
       />
       <div 
         ref={followerRef} 
-        className="fixed top-0 left-0 w-8 h-8 border border-primary rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block"
+        className="fixed top-0 left-0 w-8 h-8 border border-white rounded-full pointer-events-none z-[9998] mix-blend-difference hidden md:block"
       />
     </>
   );

@@ -83,13 +83,18 @@ const About = () => {
             {highlights.map((item, index) => (
               <div key={index} className="about-card opacity-0 group">
                 <Tilt>
-                  <Card className="bg-secondary/10 border-border/50 hover:bg-secondary/20 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
-                    <CardContent className="p-6 flex items-center gap-4">
-                      <div className="p-3 rounded-full bg-background border border-border group-hover:border-primary/50 transition-colors">
-                        <item.icon size={24} className="text-primary" />
+                  <Card className="bg-secondary/5 border-border/30 hover:bg-secondary/10 transition-all duration-500 hover:shadow-xl hover:shadow-primary/5 hover:border-primary/30 overflow-hidden relative">
+                    {/* Gradient Glow on Hover */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <CardContent className="p-6 flex items-center gap-5 relative z-10">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary to-purple-500 rounded-2xl blur-lg opacity-0 group-hover:opacity-40 transition-opacity duration-500" />
+                        <div className="relative p-4 rounded-2xl bg-gradient-to-br from-primary/10 to-purple-500/10 border border-primary/20 group-hover:border-primary/40 group-hover:from-primary/20 group-hover:to-purple-500/20 transition-all duration-500">
+                          <item.icon size={24} className="text-primary group-hover:scale-110 transition-transform duration-300" />
+                        </div>
                       </div>
                       <div>
-                        <h4 className="font-display font-bold text-lg">{item.title}</h4>
+                        <h4 className="font-display font-bold text-lg group-hover:text-primary transition-colors duration-300">{item.title}</h4>
                         <p className="text-muted-foreground text-sm">{item.desc}</p>
                       </div>
                     </CardContent>
