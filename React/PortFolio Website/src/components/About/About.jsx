@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Code, Cpu, Layers } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
+import Tilt from '../ui/Tilt';
 import { createTimeline, stagger } from 'animejs';
 
 const About = () => {
@@ -28,6 +29,12 @@ const About = () => {
                 delay: stagger(100),
                 duration: 1000,
               })
+              .add(sectionRef.current.querySelectorAll('.word-anim'), {
+                opacity: [0, 1],
+                translateY: ['20px', '0px'],
+                delay: stagger(30),
+                duration: 800,
+              }, '-=800')
               .add(sectionRef.current.querySelectorAll('.about-card'), {
                 opacity: [0, 1],
                 translateX: ['50px', '0px'],
@@ -49,6 +56,14 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  const splitText = (text) => {
+    return text.split(' ').map((word, i) => (
+      <span key={i} className="inline-block mr-1 overflow-hidden">
+        <span className="word-anim inline-block opacity-0 translate-y-4">{word}</span>
+      </span>
+    ));
+  };
+
   return (
     <section id="about" ref={sectionRef} className="py-24 md:py-32 bg-background relative">
       <div className="container mx-auto px-6 max-w-5xl">
@@ -59,26 +74,27 @@ const About = () => {
             <h3 className="about-text opacity-0 text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
               Passionate about building the <span className="text-muted-foreground">future</span>.
             </h3>
-            <p className="about-text opacity-0 text-lg text-muted-foreground leading-relaxed mb-8">
-              I am a software engineer with a deep focus on backend architecture and artificial intelligence. 
-              I bridge the gap between complex algorithms and intuitive user experiences.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+              {splitText("I am a software engineer with a deep focus on backend architecture and artificial intelligence. I bridge the gap between complex algorithms and intuitive user experiences.")}
             </p>
           </div>
 
           <div className="grid gap-6">
             {highlights.map((item, index) => (
               <div key={index} className="about-card opacity-0 group">
-                <Card className="bg-secondary/10 border-border/50 hover:bg-secondary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/20">
-                  <CardContent className="p-6 flex items-center gap-4">
-                    <div className="p-3 rounded-full bg-background border border-border group-hover:border-primary/50 transition-colors">
-                      <item.icon size={24} className="text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-display font-bold text-lg">{item.title}</h4>
-                      <p className="text-muted-foreground text-sm">{item.desc}</p>
-                    </div>
-                  </CardContent>
-                </Card>
+                <Tilt>
+                  <Card className="bg-secondary/10 border-border/50 hover:bg-secondary/20 transition-all duration-300 hover:shadow-lg hover:border-primary/20">
+                    <CardContent className="p-6 flex items-center gap-4">
+                      <div className="p-3 rounded-full bg-background border border-border group-hover:border-primary/50 transition-colors">
+                        <item.icon size={24} className="text-primary" />
+                      </div>
+                      <div>
+                        <h4 className="font-display font-bold text-lg">{item.title}</h4>
+                        <p className="text-muted-foreground text-sm">{item.desc}</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Tilt>
               </div>
             ))}
           </div>

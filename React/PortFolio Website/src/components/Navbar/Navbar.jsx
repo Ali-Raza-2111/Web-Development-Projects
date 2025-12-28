@@ -16,6 +16,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrollProgress, setScrollProgress] = useState(0);
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
 
@@ -30,6 +31,12 @@ const Navbar = () => {
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+
+      // Scroll Progress
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scroll = totalScroll / windowHeight;
+      setScrollProgress(scroll);
 
       const sections = navLinks.map((link) => link.href.slice(1));
       for (const section of sections.reverse()) {
@@ -76,9 +83,15 @@ const Navbar = () => {
         isScrolled ? "bg-background/80 backdrop-blur-md border-border/40 py-4" : "bg-transparent py-6"
       )}
     >
+      {/* Scroll Progress Bar */}
+      <div 
+        className="absolute bottom-0 left-0 h-[1px] bg-primary transition-all duration-100 ease-out z-50"
+        style={{ width: `${scrollProgress * 100}%` }}
+      />
+
       <div className="container mx-auto px-6 flex justify-between items-center">
-        <a href="#home" className="text-2xl font-display font-bold tracking-tighter hover:opacity-80 transition-opacity">
-          Ali Raza<span className="text-muted-foreground">.</span>
+        <a href="#home" className="text-2xl font-display font-bold tracking-tighter hover:opacity-80 transition-opacity relative group">
+          Ali Raza<span className="text-muted-foreground group-hover:text-primary transition-colors">.</span>
         </a>
 
         {/* Desktop Nav */}

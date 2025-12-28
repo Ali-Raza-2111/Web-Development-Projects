@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { SiPython, SiJavascript, SiReact, SiFastapi, SiOpenai, SiPostgresql, SiMongodb, SiGit } from 'react-icons/si';
 import { Card, CardContent } from '../ui/card';
+import Tilt from '../ui/Tilt';
 import { animate, stagger } from 'animejs';
 
 const skills = [
@@ -95,12 +96,14 @@ const Skills = () => {
         <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {skills.map((skill, index) => (
             <div key={index} className="opacity-0">
-              <Card className="group hover:border-primary/50 transition-all duration-300 h-full bg-background/50 backdrop-blur-sm hover:shadow-[0_0_30px_-10px_rgba(255,255,255,0.1)] hover:-translate-y-1">
-                <CardContent className="p-6 flex flex-col items-center justify-center gap-4 aspect-square">
-                  <skill.icon size={40} className="text-muted-foreground group-hover:text-primary transition-colors duration-300" />
-                  <span className="font-medium">{skill.name}</span>
-                </CardContent>
-              </Card>
+              <Tilt className="h-full">
+                <Card className="group hover:border-primary/50 transition-all duration-300 h-full bg-background/50 backdrop-blur-sm hover:shadow-[0_0_30px_-10px_rgba(255,255,255,0.1)]">
+                  <CardContent className="p-6 flex flex-col items-center justify-center gap-4 aspect-square">
+                    <skill.icon size={40} className="text-muted-foreground group-hover:text-primary transition-colors duration-300" />
+                    <span className="font-medium">{skill.name}</span>
+                  </CardContent>
+                </Card>
+              </Tilt>
             </div>
           ))}
         </div>
