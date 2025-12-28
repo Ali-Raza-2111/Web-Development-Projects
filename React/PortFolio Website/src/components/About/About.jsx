@@ -1,47 +1,76 @@
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { Code, Cpu, Layers } from 'lucide-react';
-import { cn } from '../../lib/utils';
 import { Card, CardContent } from '../ui/card';
+import { createTimeline, stagger } from 'animejs';
 
 const About = () => {
+  const sectionRef = useRef(null);
+  
   const highlights = [
     { icon: Code, title: 'Backend Focus', desc: 'Scalable systems' },
     { icon: Cpu, title: 'AI Integration', desc: 'Generative AI' },
     { icon: Layers, title: 'Full Stack', desc: 'End-to-end' },
   ];
 
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const timeline = createTimeline({
+              easing: 'easeOutExpo',
+            });
+
+            timeline
+              .add(sectionRef.current.querySelectorAll('.about-text'), {
+                opacity: [0, 1],
+                translateY: ['50px', '0px'],
+                delay: stagger(100),
+                duration: 1000,
+              })
+              .add(sectionRef.current.querySelectorAll('.about-card'), {
+                opacity: [0, 1],
+                translateX: ['50px', '0px'],
+                delay: stagger(150),
+                duration: 800,
+              }, '-=800');
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="about" className="py-24 md:py-32 bg-background relative">
+    <section id="about" ref={sectionRef} className="py-24 md:py-32 bg-background relative">
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="grid md:grid-cols-2 gap-16 items-start">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-sm font-medium text-primary mb-4 tracking-widest uppercase">About Me</h2>
-            <h3 className="text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
+          <div className="relative">
+            <div className="absolute -left-8 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent hidden md:block" />
+            <h2 className="about-text opacity-0 text-sm font-medium text-primary mb-4 tracking-widest uppercase">About Me</h2>
+            <h3 className="about-text opacity-0 text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
               Passionate about building the <span className="text-muted-foreground">future</span>.
             </h3>
-            <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+            <p className="about-text opacity-0 text-lg text-muted-foreground leading-relaxed mb-8">
               I am a software engineer with a deep focus on backend architecture and artificial intelligence. 
               I bridge the gap between complex algorithms and intuitive user experiences.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid gap-6">
             {highlights.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-              >
-                <Card className="bg-secondary/10 border-border/50 hover:bg-secondary/20 transition-colors">
+              <div key={index} className="about-card opacity-0 group">
+                <Card className="bg-secondary/10 border-border/50 hover:bg-secondary/20 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/20">
                   <CardContent className="p-6 flex items-center gap-4">
-                    <div className="p-3 rounded-full bg-background border border-border">
+                    <div className="p-3 rounded-full bg-background border border-border group-hover:border-primary/50 transition-colors">
                       <item.icon size={24} className="text-primary" />
                     </div>
                     <div>
@@ -50,7 +79,7 @@ const About = () => {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>

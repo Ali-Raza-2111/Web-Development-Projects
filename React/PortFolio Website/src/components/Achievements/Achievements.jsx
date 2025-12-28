@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { Trophy, Award, ExternalLink } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
+import { createTimeline, stagger } from 'animejs';
 
 const hackathons = [
   { title: 'Tech Innovation Hackathon', desc: 'AI-powered content generation', date: '2024' },
@@ -16,61 +17,87 @@ const certifications = [
 ];
 
 const Achievements = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const timeline = createTimeline({
+              easing: 'easeOutQuad',
+            });
+
+            timeline
+              .add(sectionRef.current.querySelectorAll('.achieve-title'), {
+                opacity: [0, 1],
+                translateY: ['20px', '0px'],
+                duration: 600,
+              })
+              .add(sectionRef.current.querySelectorAll('.hackathon-item'), {
+                opacity: [0, 1],
+                translateX: ['-20px', '0px'],
+                delay: stagger(100),
+                duration: 800,
+              }, '-=400')
+              .add(sectionRef.current.querySelectorAll('.cert-item'), {
+                opacity: [0, 1],
+                translateX: ['20px', '0px'],
+                delay: stagger(100),
+                duration: 800,
+              }, '-=800');
+
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="achievements" className="py-24 bg-secondary/5">
+    <section id="achievements" ref={sectionRef} className="py-24 bg-secondary/5">
       <div className="container mx-auto px-6 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
+        <div className="mb-16 achieve-title opacity-0">
           <h2 className="text-sm font-medium text-primary mb-4 tracking-widest uppercase">Milestones</h2>
           <h3 className="text-4xl font-display font-bold">Achievements</h3>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-16">
           {/* Hackathons */}
           <div>
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-8 achieve-title opacity-0">
               <Trophy className="text-primary" size={24} />
               <h4 className="text-2xl font-bold">Hackathons</h4>
             </div>
             <div className="space-y-8">
               {hackathons.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="relative pl-8 border-l border-border/50"
-                >
-                  <div className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-primary" />
+                <div key={index} className="hackathon-item opacity-0 relative pl-8 border-l border-border/50 hover:border-primary/50 transition-colors duration-300 group">
+                  <div className="absolute left-[-5px] top-2 w-2.5 h-2.5 rounded-full bg-primary transition-transform duration-300 group-hover:scale-150" />
                   <span className="text-xs font-mono text-muted-foreground mb-1 block">{item.date}</span>
                   <h5 className="text-lg font-bold mb-1">{item.title}</h5>
                   <p className="text-muted-foreground text-sm">{item.desc}</p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
 
           {/* Certifications */}
           <div>
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-8 achieve-title opacity-0">
               <Award className="text-primary" size={24} />
               <h4 className="text-2xl font-bold">Certifications</h4>
             </div>
             <div className="space-y-4">
               {certifications.map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                >
-                  <Card className="hover:border-primary/50 transition-colors group cursor-default">
+                <div key={index} className="cert-item opacity-0">
+                  <Card className="hover:border-primary/50 transition-all duration-300 group cursor-default hover:-translate-y-1 hover:shadow-md">
                     <CardContent className="p-4 flex justify-between items-center">
                       <div>
                         <h5 className="font-bold text-sm mb-1">{item.title}</h5>
@@ -79,7 +106,7 @@ const Achievements = () => {
                       <ExternalLink size={16} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                     </CardContent>
                   </Card>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>

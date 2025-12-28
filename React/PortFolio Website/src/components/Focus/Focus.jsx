@@ -1,7 +1,8 @@
-import { motion } from 'framer-motion';
+import { useEffect, useRef } from 'react';
 import { Code, Cpu, Zap, GraduationCap } from 'lucide-react';
 import { Card, CardHeader, CardTitle, CardContent } from '../ui/card';
 import { Badge } from '../ui/badge';
+import { animate, stagger } from 'animejs';
 
 const focusAreas = [
   {
@@ -31,29 +32,46 @@ const focusAreas = [
 ];
 
 const Focus = () => {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(sectionRef.current.querySelectorAll('.focus-anim'), {
+              opacity: [0, 1],
+              translateY: ['30px', '0px'],
+              delay: stagger(150),
+              easing: 'easeOutQuad',
+              duration: 800,
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <section id="focus" className="py-24 bg-background">
+    <section id="focus" ref={sectionRef} className="py-24 bg-background">
       <div className="container mx-auto px-6 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-16"
-        >
+        <div className="mb-16 focus-anim opacity-0">
           <h2 className="text-sm font-medium text-primary mb-4 tracking-widest uppercase">Focus</h2>
           <h3 className="text-4xl font-display font-bold">Core Philosophies</h3>
-        </motion.div>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {focusAreas.map((area, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Card className="h-full bg-secondary/5 border-border/50 hover:bg-secondary/10 transition-all">
+            <div key={index} className="focus-anim opacity-0">
+              <Card className="h-full bg-secondary/5 border-border/50 hover:bg-secondary/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:border-primary/30">
                 <CardHeader>
                   <area.icon size={32} className="text-primary mb-4" />
                   <CardTitle className="text-xl font-bold">{area.title}</CardTitle>
@@ -69,7 +87,7 @@ const Focus = () => {
                   </div>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           ))}
         </div>
       </div>

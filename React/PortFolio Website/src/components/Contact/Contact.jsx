@@ -1,19 +1,55 @@
-import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Send, CheckCircle, Loader2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Input } from '../ui/input';
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
+import { animate, stagger } from 'animejs';
 
 const Contact = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const sectionRef = useRef(null);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animate(sectionRef.current.querySelectorAll('.contact-anim'), {
+              opacity: [0, 1],
+              translateY: ['30px', '0px'],
+              delay: stagger(100),
+              easing: 'easeOutQuad',
+              duration: 800,
+            });
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Animate button scale
+    animate('.submit-btn', {
+        scale: [1, 0.95, 1],
+        duration: 300,
+        easing: 'easeInOutQuad'
+    });
+
     await new Promise(resolve => setTimeout(resolve, 1500));
     setIsSubmitting(false);
     setIsSubmitted(true);
@@ -22,28 +58,20 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-24 bg-background">
+    <section id="contact" ref={sectionRef} className="py-24 bg-background">
       <div className="container mx-auto px-6 max-w-3xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-sm font-medium text-primary mb-4 tracking-widest uppercase">Get in Touch</h2>
-          <h3 className="text-4xl md:text-5xl font-display font-bold mb-6">Let's build something amazing.</h3>
-          <p className="text-muted-foreground text-lg">
+        <div className="text-center mb-16">
+          <h2 className="contact-anim opacity-0 text-sm font-medium text-primary mb-4 tracking-widest uppercase">Get in Touch</h2>
+          <h3 className="contact-anim opacity-0 text-4xl md:text-5xl font-display font-bold mb-6">Let's build something amazing.</h3>
+          <p className="contact-anim opacity-0 text-muted-foreground text-lg">
             Have a project in mind or just want to say hi? I'm always open to discussing new opportunities.
           </p>
-        </motion.div>
+        </div>
 
-        <motion.form
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
+        <form
+          ref={formRef}
           onSubmit={handleSubmit}
-          className="space-y-6"
+          className="contact-anim opacity-0 space-y-6"
         >
           <div className="grid md:grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -88,7 +116,7 @@ const Contact = () => {
             type="submit"
             disabled={isSubmitting}
             className={cn(
-              "w-full py-6 text-base",
+              "submit-btn w-full py-6 text-base",
               isSubmitted ? "bg-green-500 hover:bg-green-600" : ""
             )}
           >
@@ -106,7 +134,7 @@ const Contact = () => {
               </>
             )}
           </Button>
-        </motion.form>
+        </form>
       </div>
     </section>
   );

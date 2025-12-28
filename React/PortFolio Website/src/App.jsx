@@ -10,6 +10,7 @@ import Footer from './components/Footer/Footer';
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary selection:text-primary-foreground">
+      <div className="bg-noise" />
       <Navbar />
       <main className="relative z-10">
         <Hero />
