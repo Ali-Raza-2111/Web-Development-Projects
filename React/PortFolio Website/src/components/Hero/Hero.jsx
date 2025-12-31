@@ -93,12 +93,12 @@ const Hero = () => {
 
             <div className="flex flex-row items-center justify-between gap-6 md:block">
               <div className="flex-1 space-y-3 md:space-y-8">
-                <h1 ref={nameRef} className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.9] opacity-0">
+                <h1 ref={nameRef} className="text-4xl sm:text-5xl md:text-8xl lg:text-9xl font-display font-bold tracking-tighter leading-[0.9] opacity-0 bg-clip-text text-transparent bg-gradient-to-r from-foreground via-foreground to-muted-foreground animate-gradient">
                   Ali Raza
                 </h1>
                 
-                <h2 ref={titleRef} className="text-base sm:text-lg md:text-4xl font-light text-muted-foreground max-w-2xl opacity-0">
-                  Software Engineer <span className="text-foreground">&</span> AI Enthusiast
+                <h2 ref={titleRef} className="text-base sm:text-lg md:text-4xl font-light max-w-2xl opacity-0">
+                  <span className="text-muted-foreground">Software Engineer</span> <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500">&</span> <span className="text-muted-foreground">AI Enthusiast</span>
                 </h2>
               </div>
 
@@ -123,8 +123,8 @@ const Hero = () => {
               </div>
             </div>
 
-            <p ref={descRef} className="text-lg text-muted-foreground/80 max-w-xl leading-relaxed opacity-0">
-              Crafting scalable backend systems and AI-powered applications with a focus on performance, elegance, and minimal design.
+            <p ref={descRef} className="text-base md:text-lg text-muted-foreground/90 max-w-xl leading-relaxed opacity-0">
+              Crafting <span className="text-foreground font-medium">scalable backend systems</span> and <span className="text-foreground font-medium">AI-powered applications</span> with a focus on performance, elegance, and minimal design.
             </p>
 
             <div ref={ctaRef} className="flex flex-wrap gap-4 pt-4">
@@ -138,7 +138,7 @@ const Hero = () => {
               <div className="magnetic-wrap opacity-0">
                 <Magnetic>
                   <Button asChild variant="outline" size="lg" className="rounded-full text-base px-8 gap-2">
-                    <a href="/resume.pdf">
+                    <a href="/resume.pdf" download="Ali_Raza_Resume.pdf">
                       <Download size={18} />
                       Resume
                     </a>
@@ -149,8 +149,8 @@ const Hero = () => {
 
             <div ref={socialRef} className="flex gap-4 pt-8">
               {[
-                { icon: Github, href: "https://github.com", color: "hover:bg-[#333] hover:text-white dark:hover:bg-white dark:hover:text-[#333]" },
-                { icon: Linkedin, href: "https://linkedin.com", color: "hover:bg-[#0A66C2] hover:text-white" },
+                { icon: Github, href: "https://github.com/Ali-Raza-2111", color: "hover:bg-[#333] hover:text-white dark:hover:bg-white dark:hover:text-[#333]" },
+                { icon: Linkedin, href: "https://www.linkedin.com/in/ali-raza-5b646735b", color: "hover:bg-[#0A66C2] hover:text-white" },
                 { icon: Mail, href: "mailto:hello@aliraza.dev", color: "hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 hover:text-white" }
               ].map((social, index) => (
                 <a

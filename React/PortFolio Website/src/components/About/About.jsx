@@ -69,8 +69,8 @@ const About = () => {
       <div className="container mx-auto px-6 max-w-5xl">
         <div className="grid md:grid-cols-2 gap-16 items-start">
           <div className="relative">
-            <div className="absolute -left-8 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/20 to-transparent hidden md:block" />
-            <h2 className="about-text opacity-0 text-sm font-medium text-primary mb-4 tracking-widest uppercase">About Me</h2>
+            <div className="absolute -left-8 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-purple-500/30 to-transparent hidden md:block" />
+            <h2 className="about-text opacity-0 text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500 mb-4 tracking-widest uppercase">About Me</h2>
             <h3 className="about-text opacity-0 text-4xl md:text-5xl font-display font-bold mb-8 leading-tight">
               Passionate about building the <span className="text-muted-foreground">future</span>.
             </h3>

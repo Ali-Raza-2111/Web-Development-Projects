@@ -3,7 +3,7 @@ import { Moon, Sun } from 'lucide-react';
 import { animate } from 'animejs';
 
 const ThemeToggle = () => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState('dark');
   const buttonRef = useRef(null);
 
   useEffect(() => {

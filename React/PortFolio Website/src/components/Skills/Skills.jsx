@@ -88,9 +88,10 @@ const Skills = () => {
        </svg>
 
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
-        <div className="mb-16">
-          <h2 className="skill-title opacity-0 text-sm font-medium text-primary mb-4 tracking-widest uppercase">Expertise</h2>
-          <h3 className="skill-title opacity-0 text-4xl font-display font-bold">Technical Arsenal</h3>
+        <div className="mb-16 text-center md:text-left">
+          <h2 className="skill-title opacity-0 text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-500 mb-4 tracking-widest uppercase">Expertise</h2>
+          <h3 className="skill-title opacity-0 text-4xl md:text-5xl font-display font-bold">Technical <span className="text-muted-foreground">Arsenal</span></h3>
+          <p className="skill-title opacity-0 text-muted-foreground mt-4 max-w-lg">Technologies I use to bring ideas to life</p>
         </div>
 
         <div ref={gridRef} className="grid grid-cols-2 md:grid-cols-4 gap-4">
