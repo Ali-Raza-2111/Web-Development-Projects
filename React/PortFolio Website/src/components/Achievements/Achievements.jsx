@@ -4,16 +4,16 @@ import { Card, CardContent } from '../ui/card';
 import { createTimeline, stagger } from 'animejs';
 
 const hackathons = [
-  { title: 'Tech Innovation Hackathon', desc: 'AI-powered content generation', date: '2024' },
-  { title: 'Code Sprint Challenge', desc: 'Real-time collaboration tool', date: '2024' },
-  { title: 'AI/ML Hackathon', desc: 'Intelligent document processing', date: '2023' },
-  { title: 'Developer Conference', desc: 'Full-stack AI application', date: '2023' },
+  { title: 'Software Sprinting Hackathon', desc: 'Hackathon on software techniques', date: '2025' },
+  { title: 'Vibehack Hackathon', desc: 'Developed a RAG system', date: '2025' },
+  { title: 'Code Clash', desc: 'Competitive exam on DSA problem solving', date: '2025' },
+  { title: 'AI/ML Hackathon', desc: 'Intelligent document processing', date: '2024' },
 ];
 
 const certifications = [
-  { title: 'Python for Everybody', issuer: 'University of Michigan', date: '2024' },
-  { title: 'Machine Learning', issuer: 'DeepLearning.AI', date: '2024' },
-  { title: 'Generative AI with LLMs', issuer: 'DeepLearning.AI', date: '2024' },
+  { title: 'Microsoft Python Development', issuer: 'Microsoft', date: '2024', link: 'https://www.coursera.org/account/accomplishments/professional-cert/LZIF5AOB50BB' },
+  { title: 'AI For Everyone', issuer: 'DeepLearning.AI', date: '2024', link: 'https://www.coursera.org/account/accomplishments/verify/UAVQHHC448GK' },
+  { title: 'Agentic AI and AI Agents: A Primer for Leaders', issuer: 'Vanderbilt University', date: '2024', link: 'https://www.coursera.org/account/accomplishments/verify/3BELPC01IRJY' },
 ];
 
 const Achievements = () => {
@@ -97,15 +97,17 @@ const Achievements = () => {
             <div className="space-y-4">
               {certifications.map((item, index) => (
                 <div key={index} className="cert-item opacity-0">
-                  <Card className="hover:border-primary/50 transition-all duration-300 group cursor-default hover:-translate-y-1 hover:shadow-md">
-                    <CardContent className="p-4 flex justify-between items-center">
-                      <div>
-                        <h5 className="font-bold text-sm mb-1">{item.title}</h5>
-                        <p className="text-xs text-muted-foreground">{item.issuer}</p>
-                      </div>
-                      <ExternalLink size={16} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </CardContent>
-                  </Card>
+                  <a href={item.link} target="_blank" rel="noopener noreferrer">
+                    <Card className="hover:border-primary/50 transition-all duration-300 group cursor-pointer hover:-translate-y-1 hover:shadow-md">
+                      <CardContent className="p-4 flex justify-between items-center">
+                        <div>
+                          <h5 className="font-bold text-sm mb-1">{item.title}</h5>
+                          <p className="text-xs text-muted-foreground">{item.issuer}</p>
+                        </div>
+                        <ExternalLink size={16} className="text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </CardContent>
+                    </Card>
+                  </a>
                 </div>
               ))}
             </div>
