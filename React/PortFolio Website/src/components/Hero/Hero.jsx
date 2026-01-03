@@ -151,7 +151,7 @@ const Hero = () => {
               {[
                 { icon: Github, href: "https://github.com/Ali-Raza-2111", color: "hover:bg-[#333] hover:text-white dark:hover:bg-white dark:hover:text-[#333]" },
                 { icon: Linkedin, href: "https://www.linkedin.com/in/ali-raza-5b646735b", color: "hover:bg-[#0A66C2] hover:text-white" },
-                { icon: Mail, href: "mailto:hello@aliraza.dev", color: "hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 hover:text-white" }
+                { icon: Mail, href: "mailto:aliraza21112005@gmail.com", color: "hover:bg-gradient-to-r hover:from-pink-500 hover:to-orange-500 hover:text-white" }
               ].map((social, index) => (
                 <a
                   key={index}
