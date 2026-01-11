@@ -1,0 +1,168 @@
+/* Container: The Timepiece */
+.timer-container {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 40px;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.timer-container::before {
+  display: none; /* No glow */
+}
+
+.timer-header {
+  display: flex;
+  justify-content: center; /* Centered */
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.timer-header h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  border-bottom: 1px solid var(--accent);
+  padding-bottom: 8px;
+}
+
+.settings-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: auto;
+  height: auto;
+  border: none;
+  color: var(--text-muted);
+}
+
+.settings-btn:hover {
+  color: var(--accent);
+  background: transparent;
+}
+
+/* Mode Tabs: Underlined Text */
+.mode-tabs {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 48px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  width: 100%;
+  justify-content: center;
+}
+
+.mode-tab {
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-family: 'Cinzel', serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.mode-tab:hover {
+  color: var(--text);
+}
+
+.mode-tab.active {
+  background: transparent;
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  box-shadow: none;
+}
+
+/* Timer Display: Elegant Circle */
+.timer-display {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto 48px;
+}
+
+.timer-bg {
+  stroke: var(--input-bg);
+  stroke-width: 2;
+}
+
+.timer-progress {
+  stroke-width: 2;
+  stroke: var(--accent) !important; /* Force Gold */
+}
+
+.timer-content {
+  gap: 8px;
+}
+
+.timer-mode {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+}
+
+.timer-time {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0;
+  text-shadow: none;
+}
+
+.timer-sessions {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  background: transparent;
+  padding: 0;
+}
+
+/* Controls */
+.timer-controls {
+  gap: 24px;
+}
+
+.control-btn {
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.control-btn.play {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: none;
+  padding: 16px 40px;
+}
+
+.control-btn.play:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.control-btn.pause {
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+}
+
+/* Settings */
+.timer-settings {
+  background: var(--card-bg);
+}
+
+.setting-group input {
+  font-family: 'Playfair Display', serif;
+}

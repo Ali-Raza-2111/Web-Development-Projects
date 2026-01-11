@@ -1,0 +1,121 @@
+/* Header: Elegant Navigation */
+.header {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  text-decoration: none;
+}
+
+.logo-icon {
+  font-size: 1.4rem;
+  color: var(--accent);
+  transform: none; /* No quirky rotation */
+}
+
+.logo h1 {
+  margin: 0;
+  font-family: 'Cinzel', serif; /* Luxury Serif */
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text);
+  text-transform: uppercase;
+  mask-image: none;
+}
+
+/* Theme Toggle: Refined Switch */
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle::after {
+  display: none; /* Remove previous fill effect */
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: none;
+}
+
+/* Main Layout: Balanced and Centered */
+.main-layout {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 60px 40px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr; /* More classic split */
+  gap: 60px;
+  align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  position: sticky;
+  top: 100px;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .right-column {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 20px 0;
+  }
+  
+  .header-content {
+    padding: 0 20px;
+  }
+  
+  .main-layout {
+    padding: 30px 20px;
+  }
+}

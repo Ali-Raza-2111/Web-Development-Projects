@@ -1,0 +1,264 @@
+/* Container: Clean Surface */
+.todo-list-container {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px; /* Slightly sharp corners */
+  padding: 40px;
+  box-shadow: var(--shadow);
+}
+
+.todo-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 24px;
+}
+
+.todo-list-header h2 {
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  font-weight: 500;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+
+/* Add Todo Form */
+.add-todo {
+  margin-bottom: 40px;
+}
+
+.add-todo-input-group {
+  display: flex;
+  gap: 0; /* Connected inputs */
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  transition: border-color 0.3s ease;
+}
+
+.add-todo-input-group:focus-within {
+  border-color: var(--accent);
+}
+
+.add-todo-input {
+  flex: 1;
+  padding: 16px 24px;
+  border: none;
+  background: transparent;
+  color: var(--text);
+  font-size: 1rem;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.add-todo-input:focus {
+  outline: none;
+}
+
+.priority-select {
+  padding: 0 24px;
+  border: none;
+  border-left: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+}
+
+.add-todo-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 32px;
+  background: var(--accent);
+  color: var(--bg); /* Contrast text */
+  border: none;
+  border-radius: 0 3px 3px 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.add-todo-btn:hover {
+  filter: brightness(1.1);
+}
+
+/* Filters: Text Tags */
+.todo-filters {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+  border-bottom: none;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 24px;
+}
+
+.filter-btn {
+  padding: 8px 0;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.filter-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.filter-count {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.7em;
+  vertical-align: top;
+  opacity: 0.7;
+}
+
+/* Todo List Stream */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0; /* Lists often touch in luxury design */
+}
+
+/* Todo Item: Bordered Rows */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 24px;
+  background: transparent;
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.2s;
+}
+
+.todo-item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.todo-item:hover {
+  background: var(--hover-bg);
+}
+
+/* Indicator as a refined dot */
+.priority-indicator {
+  display: none; /* Removed the sidebar line */
+}
+
+.priority-badge {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  padding: 0;
+  color: transparent;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--border); 
+}
+
+.priority-badge.high { background: var(--danger); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--danger); }
+.priority-badge.medium { background: var(--warning); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--warning); }
+.priority-badge.low { background: var(--success); box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--success); }
+
+
+/* Checkbox: Gold Ring */
+.todo-checkbox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--text-muted);
+  border-radius: 50%; /* Circle */
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+.todo-checkbox:hover .checkmark {
+  border-color: var(--accent);
+}
+
+.todo-checkbox input:checked ~ .checkmark {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+/* Text */
+.todo-text {
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--text);
+}
+
+.todo-item.completed .todo-text {
+  color: var(--text-muted);
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* Actions */
+.todo-actions {
+  margin-left: auto; /* Push to right */
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.todo-item:hover .todo-actions {
+  opacity: 1;
+}
+
+.todo-btn {
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.todo-btn:hover {
+  color: var(--accent);
+}
+
+/* Checkmark Icon */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid var(--card-bg);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.todo-checkbox input:checked ~ .checkmark:after {
+  display: block;
+}
+

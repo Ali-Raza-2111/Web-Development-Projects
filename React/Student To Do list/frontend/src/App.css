@@ -1,0 +1,108 @@
+/* Luxury Theme Variables */
+:root {
+  /* Dark Theme (Default) - "Midnight Gold" */
+  --bg: #0a0a0a;
+  --card-bg: #141414;
+  --input-bg: #0f0f0f;
+  --item-bg: #1a1a1a;
+  --item-hover: #222222;
+  --hover-bg: rgba(212, 175, 55, 0.08); /* Gold hint */
+  
+  --border: #333333;
+  --glass-border: 1px solid rgba(212, 175, 55, 0.15); /* Gold border */
+  
+  --text: #e0e0e0;
+  --text-muted: #888888;
+  
+  /* Palette */
+  --accent: #D4AF37; /* Metallic Gold */
+  --accent-rgb: 212, 175, 55;
+  --accent-secondary: #C5A028;
+  
+  --success: #6B8E23; /* Olive Drab (More refined green) */
+  --success-bg: rgba(107, 142, 35, 0.1);
+  
+  --warning: #CD853F; /* Peru (Bronze-ish) */
+  --danger: #8B0000; /* Dark Red */
+  --info: #4682B4; /* Steel Blue */
+  
+  --shadow: 0 10px 40px rgba(0,0,0,0.6);
+  --backdrop-blur: blur(0px); /* Solid richness usually better for luxury/print feel */
+  
+  --scrollbar-track: #0a0a0a;
+  --scrollbar-thumb: #333;
+}
+
+[data-theme="light"] {
+  /* Light Theme - "Royal Porcelain" */
+  --bg: #f8f9fa; /* Off-white */
+  --card-bg: #ffffff;
+  --input-bg: #f4f4f4;
+  --item-bg: #ffffff;
+  --item-hover: #fcfcfc;
+  --hover-bg: rgba(10, 35, 66, 0.04);
+  
+  --border: #e0e0e0;
+  --glass-border: 1px solid rgba(0, 0, 0, 0.04);
+  
+  --text: #1a1a1a;
+  --text-muted: #666666;
+  
+  --accent: #0A2342; /* Oxford Blue */
+  --accent-rgb: 10, 35, 66;
+  --accent-secondary: #0D2E55;
+  
+  --success: #2E5A35; /* Hunter Green */
+  --success-bg: rgba(46, 90, 53, 0.08);
+  
+  --warning: #B8860B; /* Dark Goldenrod */
+  --danger: #A52A2A; /* Brown/Red */
+  --info: #5F9EA0; /* Cadet Blue */
+  
+  --shadow: 0 20px 40px rgba(0,0,0,0.04);
+  --scrollbar-track: #f8f9fa;
+  --scrollbar-thumb: #d0d0d0;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg);
+  background-image: none; /* No noise */
+  color: var(--text);
+  transition: background-color 0.5s ease;
+}
+
+/* App Container */
+.app {
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Animations */
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeInScale 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
