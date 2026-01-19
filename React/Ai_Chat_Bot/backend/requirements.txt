@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+psycopg2-binary
+python-dotenv
+pydantic
+pydantic-settings
+alembic
+asyncpg
+python-multipart
+httpx
+langchain-ollama
+langgraph

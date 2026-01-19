@@ -1,0 +1,201 @@
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 300px;
+  height: 100%;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+}
+
+/* Decorative gradient accent */
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: var(--gradient-glow);
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Header */
+.sidebar-header {
+  padding: var(--space-6);
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar-header h1 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 var(--space-5) 0;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.sidebar-header h1 span {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* New Chat Button */
+.new-chat-btn {
+  width: 100%;
+  padding: var(--space-4) var(--space-5);
+  background: var(--light-cream);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--duration-normal) var(--ease-out);
+  box-shadow: 0 4px 20px rgba(248, 246, 241, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.new-chat-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%);
+  opacity: 1;
+  transition: opacity var(--duration-fast);
+}
+
+.new-chat-btn:hover {
+  transform: translateY(-2px);
+  background: var(--light-ivory);
+  box-shadow: 0 8px 30px rgba(248, 246, 241, 0.25);
+  box-shadow: var(--glow-accent), var(--shadow-md);
+}
+
+.new-chat-btn:hover::before {
+  opacity: 1;
+}
+
+.new-chat-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Conversation List */
+.conversation-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.conversation-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-out);
+  position: relative;
+}
+
+.conversation-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: var(--light-cream);
+  border-radius: var(--radius-full);
+  transition: height var(--duration-normal) var(--ease-spring);
+}
+
+.conversation-item:hover {
+  background: var(--bg-hover);
+  border-color: rgba(248, 246, 241, 0.1);
+}
+
+.conversation-item.active {
+  background: rgba(248, 246, 241, 0.05);
+  border-color: rgba(248, 246, 241, 0.15);
+}
+
+.conversation-item.active::before {
+  height: 60%;
+}
+
+.conversation-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.conversation-title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--light-mist);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+
+.conversation-item.active .conversation-title {
+  color: var(--light-cream);
+}
+
+.conversation-meta {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-tertiary);
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  opacity: 0;
+  transition: all var(--duration-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.conversation-item:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: rgba(247, 118, 142, 0.15);
+  color: var(--accent-danger);
+}
+
+.no-conversations {
+  text-align: center;
+  padding: var(--space-7) var(--space-5);
+  color: var(--text-tertiary);
+  font-style: italic;
+}
+
+.no-conversations p {
+  margin: 0;
+}
