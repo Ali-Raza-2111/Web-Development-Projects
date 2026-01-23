@@ -3,8 +3,9 @@ RAG Agent with ChromaDB and LangGraph ReAct Pattern
 This module combines document retrieval with the ReAct agent for intelligent responses.
 """
 
-from typing import Annotated, Sequence, TypedDict, List, Tuple, Optional
-from langchain_ollama import ChatOllama, OllamaEmbeddings
+from typing import Annotated, Sequence, TypedDict, List, Tuple, Optional, Dict, Any
+from langchain_ollama import ChatOllama
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, BaseMessage, SystemMessage
 from langchain_core.tools import tool
 from langchain_core.documents import Document
@@ -16,6 +17,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
 import os
 import asyncio
+import hashlib
 from concurrent.futures import ThreadPoolExecutor
 
 # ChromaDB persistence directory
@@ -34,8 +36,8 @@ class RAGAgent:
         self.model_name = model
         self.temperature = temperature
         
-        # Initialize embeddings
-        self.embeddings = OllamaEmbeddings(model="llama3.2:1b")
+        # Initialize FastEmbed embeddings (HuggingFace BGE model via ONNX - no PyTorch needed)
+        self.embeddings = FastEmbedEmbeddings(model_name="BAAI/bge-small-en-v1.5")
         
         # Initialize ChromaDB vector store
         self.vectorstore = Chroma(
@@ -59,6 +61,9 @@ class RAGAgent:
         
         # Thread pool for async operations
         self.executor = ThreadPoolExecutor(max_workers=4)
+        
+        # Store for retrieved source metadata (per query)
+        self._current_sources: List[Dict[str, Any]] = []
     
     def _init_llm(self):
         """Initialize the LLM with tools"""
@@ -67,18 +72,44 @@ class RAGAgent:
             temperature=self.temperature,
         )
         
+        # Reference to self for closure
+        agent_self = self
+        
         # Define tools
         @tool
         def search_documents(query: str) -> str:
             """Search the knowledge base for relevant information about a topic."""
-            docs = self.vectorstore.similarity_search(query, k=3)
-            if not docs:
+            # Use similarity_search_with_score for relevance scores
+            docs_with_scores = agent_self.vectorstore.similarity_search_with_score(query, k=4)
+            if not docs_with_scores:
                 return "No relevant documents found in the knowledge base."
             
             result = ""
-            for i, doc in enumerate(docs):
-                result += f"\n[Source {i+1}: {doc.metadata.get('source', 'Unknown')}]\n"
+            agent_self._current_sources = []  # Reset sources for this query
+            
+            for i, (doc, score) in enumerate(docs_with_scores):
+                filename = doc.metadata.get('source', 'Unknown')
+                page = doc.metadata.get('page', None)
+                
+                # Generate unique chunk ID from content hash
+                chunk_id = hashlib.md5(doc.page_content[:200].encode()).hexdigest()[:12]
+                
+                # Store detailed metadata
+                source_meta = {
+                    "id": chunk_id,
+                    "filename": filename,
+                    "page": page + 1 if page is not None else None,  # Convert to 1-indexed
+                    "excerpt": doc.page_content[:500],  # First 500 chars as excerpt
+                    "highlight_text": doc.page_content,  # Full text for highlighting
+                    "relevance_score": round(float(1 - score), 3),  # Convert distance to similarity
+                }
+                agent_self._current_sources.append(source_meta)
+                
+                # Format for LLM with source reference
+                page_info = f", Page {page + 1}" if page is not None else ""
+                result += f"\n[Source {i+1}: {filename}{page_info} | ID:{chunk_id}]\n"
                 result += doc.page_content + "\n"
+            
             return result
         
         @tool
@@ -111,19 +142,22 @@ class RAGAgent:
         
         def call_model(state: AgentState) -> AgentState:
             """Call the LLM with the current state"""
-            system_message = SystemMessage(content="""You are NeuralRAG, an intelligent AI assistant with access to a knowledge base.
-            
-Your capabilities:
-1. Search and retrieve information from uploaded documents using the search_documents tool
-2. Perform mathematical calculations using add_numbers, subtract_numbers, multiply_numbers, divide_numbers tools
-3. Answer questions based on retrieved context
+            system_message = SystemMessage(content="""You are NeuralRAG, an intelligent AI assistant with access to a knowledge base of uploaded documents.
 
-Guidelines:
-- Always search the knowledge base when asked about specific documents or topics
-- Provide clear, accurate responses based on available information
-- Cite sources when referencing documents
-- If information is not found, say so clearly
-- Be helpful and conversational""")
+CRITICAL INSTRUCTION: You MUST use the search_documents tool FIRST for EVERY question before responding.
+DO NOT answer from your own knowledge. ALWAYS search the documents first.
+
+Your capabilities:
+1. search_documents - USE THIS FIRST for any question about information, policies, facts, data
+2. add_numbers, subtract_numbers, multiply_numbers, divide_numbers - for math calculations
+
+WORKFLOW:
+1. User asks a question → IMMEDIATELY call search_documents with relevant keywords
+2. Read the retrieved context from the tool
+3. Answer based ONLY on what the documents say
+4. If nothing relevant is found, say "I couldn't find this information in the uploaded documents."
+
+NEVER make up information. NEVER answer without searching first.""")
             
             response = self.llm_with_tools.invoke([system_message] + list(state["messages"]))
             return {"messages": [response]}
@@ -201,37 +235,71 @@ Guidelines:
             print(f"Error removing document: {e}")
             return False
     
-    def _run_sync(self, query: str, history: List[dict]) -> Tuple[str, List[str]]:
-        """Synchronous execution of the agent"""
-        # Build messages
-        messages = []
+    def _run_sync(self, query: str, history: List[dict]) -> Tuple[str, List[Dict[str, Any]]]:
+        """Synchronous execution - Always retrieve then generate"""
+        # Reset current sources before query
+        self._current_sources = []
+        
+        # STEP 1: Always retrieve relevant documents first
+        docs_with_scores = self.vectorstore.similarity_search_with_score(query, k=4)
+        
+        context = ""
+        if docs_with_scores:
+            for i, (doc, score) in enumerate(docs_with_scores):
+                filename = doc.metadata.get('source', 'Unknown')
+                page = doc.metadata.get('page', None)
+                
+                # Generate unique chunk ID from content hash
+                chunk_id = hashlib.md5(doc.page_content[:200].encode()).hexdigest()[:12]
+                
+                # Store detailed metadata
+                source_meta = {
+                    "id": chunk_id,
+                    "filename": filename,
+                    "page": page + 1 if page is not None else None,
+                    "excerpt": doc.page_content[:500],
+                    "highlight_text": doc.page_content,
+                    "relevance_score": round(float(1 - score), 3),
+                }
+                self._current_sources.append(source_meta)
+                
+                # Build context for LLM
+                page_info = f" (Page {page + 1})" if page is not None else ""
+                context += f"\n--- Source {i+1}: {filename}{page_info} ---\n"
+                context += doc.page_content + "\n"
+        
+        # STEP 2: Generate response with retrieved context
+        if context:
+            system_prompt = """You are a helpful assistant that answers questions based on the provided document context.
+Answer the question using ONLY the information from the context below.
+If the answer is not in the context, say "I couldn't find this information in the uploaded documents."
+Be concise and cite the source when possible."""
+            
+            user_prompt = f"""Context from documents:
+{context}
+
+Question: {query}
+
+Answer based on the context above:"""
+        else:
+            system_prompt = "You are a helpful assistant."
+            user_prompt = f"No documents have been uploaded yet. The user asked: {query}\n\nPlease tell them to upload documents first."
+        
+        # Build messages with history
+        messages = [SystemMessage(content=system_prompt)]
         for msg in history:
             if msg['role'] == 'user':
                 messages.append(HumanMessage(content=msg['content']))
             else:
                 messages.append(AIMessage(content=msg['content']))
+        messages.append(HumanMessage(content=user_prompt))
         
-        messages.append(HumanMessage(content=query))
+        # Generate response
+        response = self.llm.invoke(messages)
         
-        # Run the agent
-        result = self.app.invoke({"messages": messages})
-        
-        # Extract response and sources
-        last_message = result["messages"][-1]
-        response_content = last_message.content
-        
-        # Extract sources from tool results
-        sources = []
-        for msg in result["messages"]:
-            if isinstance(msg, ToolMessage) and "Source" in msg.content:
-                # Extract source names from tool response
-                import re
-                source_matches = re.findall(r'\[Source \d+: ([^\]]+)\]', msg.content)
-                sources.extend(source_matches)
-        
-        return response_content, list(set(sources))
+        return response.content, self._current_sources.copy()
     
-    async def query(self, query: str, history: List[dict] = None) -> Tuple[str, List[str]]:
+    async def query(self, query: str, history: List[dict] = None) -> Tuple[str, List[Dict[str, Any]]]:
         """Query the RAG agent asynchronously"""
         history = history or []
         

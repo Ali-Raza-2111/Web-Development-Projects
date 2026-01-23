@@ -21,6 +21,7 @@ def get_rag_agent() -> RAGAgent:
             chroma_dir=settings.CHROMA_DIR,
             chunk_size=settings.CHUNK_SIZE,
             chunk_overlap=settings.CHUNK_OVERLAP,
+            embedding_model=settings.EMBEDDING_MODEL,
         )
     return _rag_agent
 

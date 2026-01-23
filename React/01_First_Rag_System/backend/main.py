@@ -1,8 +1,8 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 import os
 import uuid
 import shutil
@@ -41,7 +41,7 @@ class ChatResponse(BaseModel):
     id: str
     role: str
     content: str
-    sources: Optional[List[str]] = None
+    sources: Optional[List[Dict[str, Any]]] = None  # Now returns detailed source metadata
 
 class DocumentResponse(BaseModel):
     id: str
@@ -177,6 +177,93 @@ async def delete_document(doc_id: str):
         del documents_store[doc_id]
         
         return {"message": "Document deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@app.get("/api/documents/view/{filename}")
+async def view_document(filename: str, highlight: Optional[str] = Query(None)):
+    """View a document with optional text highlighting for source verification"""
+    from langchain_community.document_loaders import PyPDFLoader, TextLoader
+    
+    # Find the document in store
+    doc_info = None
+    for doc in documents_store.values():
+        if doc["filename"] == filename:
+            doc_info = doc
+            break
+    
+    if not doc_info:
+        raise HTTPException(status_code=404, detail="Document not found")
+    
+    file_path = doc_info["path"]
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="Document file not found")
+    
+    try:
+        # Load document
+        if file_path.lower().endswith('.pdf'):
+            loader = PyPDFLoader(file_path)
+            documents = loader.load()
+            
+            pages = []
+            for i, doc in enumerate(documents):
+                page_text = doc.page_content
+                has_highlight = False
+                highlight_start = -1
+                highlight_end = -1
+                
+                # Find highlight position if provided
+                if highlight:
+                    # Try to find exact match first
+                    pos = page_text.find(highlight[:100])  # Use first 100 chars to find
+                    if pos != -1:
+                        has_highlight = True
+                        highlight_start = pos
+                        highlight_end = pos + len(highlight)
+                
+                pages.append({
+                    "page": i + 1,
+                    "text": page_text,
+                    "has_highlight": has_highlight,
+                    "highlight_start": highlight_start,
+                    "highlight_end": highlight_end
+                })
+            
+            return {
+                "filename": filename,
+                "type": "pdf",
+                "total_pages": len(pages),
+                "pages": pages,
+                "highlight_text": highlight
+            }
+        else:
+            # Text file
+            loader = TextLoader(file_path)
+            documents = loader.load()
+            text = documents[0].page_content if documents else ""
+            
+            has_highlight = False
+            highlight_start = -1
+            highlight_end = -1
+            
+            if highlight:
+                pos = text.find(highlight[:100])
+                if pos != -1:
+                    has_highlight = True
+                    highlight_start = pos
+                    highlight_end = pos + len(highlight)
+            
+            return {
+                "filename": filename,
+                "type": "text",
+                "content": text,
+                "has_highlight": has_highlight,
+                "highlight_start": highlight_start,
+                "highlight_end": highlight_end,
+                "highlight_text": highlight
+            }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

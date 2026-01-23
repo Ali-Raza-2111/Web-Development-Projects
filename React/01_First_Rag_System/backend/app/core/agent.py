@@ -4,7 +4,8 @@ This module combines document retrieval with the ReAct agent for intelligent res
 """
 
 from typing import Annotated, Sequence, TypedDict, List, Tuple, Optional, Dict, Any
-from langchain_ollama import ChatOllama, OllamaEmbeddings
+from langchain_ollama import ChatOllama
+from langchain_community.embeddings import FastEmbedEmbeddings
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, BaseMessage, SystemMessage
 from langchain_core.tools import tool
 from langchain_core.documents import Document
@@ -56,18 +57,23 @@ class RAGAgent:
         chroma_dir: str = None,
         chunk_size: int = 1000,
         chunk_overlap: int = 200,
+        embedding_model: str = "BAAI/bge-small-en-v1.5",
     ):
         self.model_name = model
         self.temperature = temperature
         self.chroma_dir = chroma_dir or os.path.join(os.path.dirname(__file__), "../../chroma_db")
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
+        self.embedding_model = embedding_model
         
         # Ensure chroma directory exists
         os.makedirs(self.chroma_dir, exist_ok=True)
         
-        # Initialize embeddings
-        self.embeddings = OllamaEmbeddings(model="llama3.2:1b")
+        # Initialize FastEmbed embeddings - ONNX-based, lightweight (no PyTorch needed!)
+        # Available models: "BAAI/bge-small-en-v1.5" (fast), "BAAI/bge-base-en-v1.5" (balanced)
+        self.embeddings = FastEmbedEmbeddings(
+            model_name=self.embedding_model,
+        )
         
         # Initialize ChromaDB vector store
         self.vectorstore = Chroma(

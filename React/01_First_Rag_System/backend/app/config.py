@@ -34,6 +34,10 @@ class Settings(BaseSettings):
     DEFAULT_MODEL: str = "llama3.2:1b"
     DEFAULT_TEMPERATURE: float = 0.7
     
+    # Embedding model settings (FastEmbed - ONNX based, no PyTorch needed)
+    # Options: "BAAI/bge-small-en-v1.5" (fastest), "BAAI/bge-base-en-v1.5" (balanced)
+    EMBEDDING_MODEL: str = "BAAI/bge-small-en-v1.5"
+    
     # Document processing
     CHUNK_SIZE: int = 1000
     CHUNK_OVERLAP: int = 200
