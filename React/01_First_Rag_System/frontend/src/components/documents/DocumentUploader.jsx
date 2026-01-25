@@ -4,6 +4,8 @@ import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppContext } from '../../context/AppContext';
 
+
+
 const DocumentUploader = () => {
   const [dragActive, setDragActive] = useState(false);
   const { files, uploadFile, removeFile, isConnected } = useAppContext();
