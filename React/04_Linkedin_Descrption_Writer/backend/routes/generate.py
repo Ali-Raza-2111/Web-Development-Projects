@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from fastapi.`responses` import StreamingResponse
+from fastapi.responses import StreamingResponse
 from schemas.description import GenerateRequest, GenerateResponse, RefineRequest, RefineResponse
 from services.text_generator import text_generator
 
