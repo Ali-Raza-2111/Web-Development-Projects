@@ -1,0 +1,226 @@
+.generator-container {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.generator-card {
+    padding: var(--space-2xl);
+}
+
+.generator-header {
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.generator-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: var(--space-xs);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.generator-header p {
+    color: var(--text-secondary);
+}
+
+.inline-icon {
+    color: var(--ocean-glow);
+}
+
+.inline-icon-sm {
+    display: inline-block;
+    vertical-align: text-bottom;
+    margin-right: var(--space-xs);
+    color: var(--ocean-light);
+}
+
+/* Tone Selector */
+.tone-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+}
+
+.tone-btn {
+    padding: var(--space-sm) var(--space-md);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all var(--transition-fast);
+}
+
+.tone-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.tone-btn.active {
+    background: rgba(37, 99, 235, 0.2);
+    border-color: var(--ocean-mid);
+    color: var(--ocean-glow);
+}
+
+.form-row {
+    display: flex;
+    gap: var(--space-lg);
+}
+
+.half {
+    flex: 1;
+}
+
+/* Checkboxes */
+.options-row {
+    display: flex;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-xl);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    color: var(--text-secondary);
+}
+
+.checkbox-label input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.2);
+    transition: all var(--transition-fast);
+    color: transparent;
+}
+
+.checkbox-label input:checked + .checkbox-custom {
+    background: var(--ocean-mid);
+    border-color: var(--ocean-mid);
+    color: white;
+}
+
+.checkbox-label:hover .checkbox-custom {
+    border-color: var(--ocean-glow);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.error-message-inline {
+    color: var(--accent-error);
+    margin-bottom: var(--space-md);
+    text-align: center;
+}
+
+/* Result Page */
+.btn-back {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-lg);
+    cursor: pointer;
+}
+
+.btn-back:hover {
+    color: var(--text-primary);
+}
+
+.result-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+    .result-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+.result-main {
+    padding: var(--space-xl);
+}
+
+.result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-md);
+}
+
+.result-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+.char-count {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.editor-wrapper {
+    margin-bottom: var(--space-lg);
+}
+
+.result-textarea {
+    width: 100%;
+    min-height: 400px;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.6;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.result-textarea:focus {
+    outline: none;
+    border-color: var(--ocean-glow);
+}
+
+.result-actions {
+    display: flex;
+    gap: var(--space-md);
+}
+
+.refine-panel {
+    padding: var(--space-lg);
+    height: fit-content;
+}
+
+.refine-panel h3 {
+    margin: 0 0 var(--space-xs);
+    font-size: 1.1rem;
+}
+
+.refine-desc {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-bottom: var(--space-md);
+}
+
+.refine-textarea {
+    min-height: 100px;
+    margin-bottom: var(--space-md);
+    font-size: 0.9rem;
+}

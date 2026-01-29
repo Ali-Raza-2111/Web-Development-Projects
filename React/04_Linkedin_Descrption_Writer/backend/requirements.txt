@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+pydantic
+langgraph
+IPython
+langchain-ollama
+langchain_core
+langchain-community
+pypdf

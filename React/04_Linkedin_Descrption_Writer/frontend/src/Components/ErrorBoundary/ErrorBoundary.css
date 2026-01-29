@@ -1,0 +1,25 @@
+.error-boundary-container {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ocean-darkest);
+}
+
+.error-card {
+    padding: var(--space-2xl);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+.error-title {
+    font-size: 2rem;
+    margin-bottom: var(--space-md);
+    color: var(--ocean-glow);
+}
+
+.error-message {
+    margin-bottom: var(--space-xl);
+    color: var(--text-secondary);
+}
