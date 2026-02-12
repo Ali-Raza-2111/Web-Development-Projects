@@ -1,0 +1,23 @@
+# Core framework
+fastapi
+uvicorn[standard]
+python-dotenv
+python-multipart
+
+# PDF processing
+PyMuPDF
+
+# LangChain ecosystem
+langchain
+langchain-core
+langchain-community
+langchain-ollama
+langchain-google-genai
+langchain-classic
+langgraph
+langchain-google-genai
+
+
+# Retrieval
+rank_bm25
+chromadb
