@@ -11,7 +11,6 @@ import JobIntelligence from "./pages/JobIntelligence";
 import Outreach from "./pages/Outreach";
 import InterviewPrep from "./pages/InterviewPrep";
 import Analytics from "./pages/Analytics";
-import ControlTowerPage from "./pages/ControlTowerPage";
 import SettingsPage from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 
@@ -32,7 +31,6 @@ const App = () => (
             <Route path="/outreach" element={<Outreach />} />
             <Route path="/interview-prep" element={<InterviewPrep />} />
             <Route path="/analytics" element={<Analytics />} />
-            <Route path="/control-tower" element={<ControlTowerPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

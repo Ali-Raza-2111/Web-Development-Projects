@@ -1,0 +1,23 @@
+# ─── CareerOS Backend ───────────────────────────────────────────
+# Core
+fastapi>=0.115.0
+uvicorn[standard]>=0.34.0
+python-multipart>=0.0.18
+
+# LangGraph / LangChain
+langgraph>=0.2.0
+langchain-openai>=0.3.0
+langchain-core>=0.3.0
+
+# Resume parsing
+PyMuPDF>=1.25.0
+python-docx>=1.1.0
+
+# Job search
+requests>=2.32.0
+
+# Observability (optional)
+langsmith>=0.2.0
+
+# Env vars
+python-dotenv>=1.0.0

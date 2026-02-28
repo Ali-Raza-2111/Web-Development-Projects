@@ -57,6 +57,84 @@
     --sidebar-border: 222 30% 12%;
     --sidebar-ring: 190 95% 55%;
   }
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 190 95% 55%;
+    --primary-foreground: 222 47% 6%;
+    --secondary: 222 30% 14%;
+    --secondary-foreground: 210 25% 72%;
+    --muted: 222 30% 12%;
+    --muted-foreground: 215 20% 50%;
+    --accent: 190 95% 55%;
+    --accent-foreground: 222 47% 6%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 210 40% 98%;
+    --success: 160 84% 39%;
+    --success-foreground: 222 47% 6%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 6%;
+    --border: 222 30% 16%;
+    --input: 222 30% 16%;
+    --ring: 190 95% 55%;
+    --radius: 0.75rem;
+    --glass: 222 47% 8% / 0.6;
+    --glass-border: 222 30% 20% / 0.4;
+    --glow-primary: 190 95% 55% / 0.15;
+    --glow-success: 160 84% 39% / 0.15;
+    --glow-warning: 38 92% 50% / 0.15;
+    --sidebar-background: 222 47% 5%;
+    --sidebar-foreground: 210 25% 72%;
+    --sidebar-primary: 190 95% 55%;
+    --sidebar-primary-foreground: 222 47% 6%;
+    --sidebar-accent: 222 30% 12%;
+    --sidebar-accent-foreground: 210 40% 96%;
+    --sidebar-border: 222 30% 12%;
+    --sidebar-ring: 190 95% 55%;
+  }
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 6%;
+    --primary: 190 95% 55%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 222 30% 96%;
+    --secondary-foreground: 222 47% 6%;
+    --muted: 222 30% 92%;
+    --muted-foreground: 215 20% 50%;
+    --accent: 190 95% 55%;
+    --accent-foreground: 222 47% 6%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 160 84% 39%;
+    --success-foreground: 222 47% 6%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 6%;
+    --border: 222 30% 90%;
+    --input: 222 30% 90%;
+    --ring: 190 95% 55%;
+    --radius: 0.75rem;
+    --glass: 0 0% 100% / 0.6;
+    --glass-border: 222 30% 90% / 0.4;
+    --glow-primary: 190 95% 55% / 0.15;
+    --glow-success: 160 84% 39% / 0.15;
+    --glow-warning: 38 92% 50% / 0.15;
+    --sidebar-background: 222 30% 96%;
+    --sidebar-foreground: 222 47% 6%;
+    --sidebar-primary: 190 95% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 30% 92%;
+    --sidebar-accent-foreground: 222 47% 6%;
+    --sidebar-border: 222 30% 90%;
+    --sidebar-ring: 190 95% 55%;
+  }
 }
 
 @layer base {
