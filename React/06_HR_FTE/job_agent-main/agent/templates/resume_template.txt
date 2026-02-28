@@ -1,0 +1,2 @@
+# Template for generating resumes.
+# Contains placeholders for dynamic user data.

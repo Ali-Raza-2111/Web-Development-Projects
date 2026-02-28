@@ -1,0 +1,8 @@
+credentials.json
+user_profile.json
+browser_session/
+__pycache__/
+*.log
+history.json
+.DS_Store
+.env

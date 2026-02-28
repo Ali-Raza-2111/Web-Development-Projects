@@ -1,0 +1,9 @@
+Daily application limit: 7
+Minimum match score: 60%
+Initial search keyword: Python Developer
+Search locations: United States
+Browser mode: headful
+Log search results: yes
+Avoid already applied jobs: yes
+Use AI for tailoring: yes
+LLM Model: google/gemini-flash-1.5

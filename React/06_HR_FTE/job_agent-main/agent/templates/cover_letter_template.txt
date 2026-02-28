@@ -1,0 +1,2 @@
+# Template for generating cover letters.
+# Contains placeholders for dynamic user and company data.
