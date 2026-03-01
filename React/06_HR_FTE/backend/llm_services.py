@@ -1,21 +1,25 @@
 """
-LLM utilities — wraps OpenRouter (or mocks) for role detection, matching, and writing.
+LLM utilities — provider-agnostic (Groq, OpenRouter, or any OpenAI-compatible API).
 Uses LangChain for LangSmith observability.
 """
 import json
 import config
 
 
-def _get_llm():
-    """Get a LangChain ChatOpenAI instance pointed at OpenRouter."""
+def _get_llm(temperature: float = 0.3, max_tokens: int | None = None):
+    """Get a LangChain ChatOpenAI instance for the active LLM provider."""
     from langchain_openai import ChatOpenAI
 
-    return ChatOpenAI(
-        model=config.LLM_MODEL,
-        openai_api_key=config.OPENROUTER_API_KEY,
-        openai_api_base="https://openrouter.ai/api/v1",
-        temperature=0.3,
+    api_key, base_url, model = config.get_llm_settings()
+    kwargs = dict(
+        model=model,
+        openai_api_key=api_key,
+        openai_api_base=base_url,
+        temperature=temperature,
     )
+    if max_tokens:
+        kwargs["max_tokens"] = max_tokens
+    return ChatOpenAI(**kwargs)
 
 
 def detect_role_from_resume(resume_text: str, skills: list[str]) -> dict:
@@ -23,7 +27,7 @@ def detect_role_from_resume(resume_text: str, skills: list[str]) -> dict:
     Use LLM to detect the best-fit job role(s) from a resume.
     Returns: { "primary_role": str, "secondary_roles": list, "seniority": str, "preferred_location": str }
     """
-    if config.DEMO_MODE or not config.OPENROUTER_API_KEY:
+    if config.DEMO_MODE or not config.has_llm_key():
         # Smart mock based on skills
         role_map = {
             "python": "Python Developer",
@@ -98,7 +102,7 @@ def calculate_match_score(profile: dict, job_description: str) -> int:
     """
     Calculate match score (0-100) between profile and job description.
     """
-    if config.DEMO_MODE or not config.OPENROUTER_API_KEY:
+    if config.DEMO_MODE or not config.has_llm_key():
         # Simple keyword matching for demo
         skills = profile.get("skills", [])
         if not skills:
@@ -131,7 +135,7 @@ USER ROLE: {profile.get('detected_role', 'Unknown')}"""
 
 def generate_cover_letter(profile: dict, job: dict) -> str:
     """Generate a tailored cover letter."""
-    if config.DEMO_MODE or not config.OPENROUTER_API_KEY:
+    if config.DEMO_MODE or not config.has_llm_key():
         name = profile.get("name", "Candidate")
         role = job.get("title", "the position")
         company = job.get("company", "your company")

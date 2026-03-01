@@ -12,6 +12,7 @@ import Outreach from "./pages/Outreach";
 import InterviewPrep from "./pages/InterviewPrep";
 import Analytics from "./pages/Analytics";
 import SettingsPage from "./pages/Settings";
+import LoginSessionPage from "./pages/LoginSession";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/interview-prep" element={<InterviewPrep />} />
             <Route path="/analytics" element={<Analytics />} />
             <Route path="/settings" element={<SettingsPage />} />
+            <Route path="/login-session" element={<LoginSessionPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AppLayout>

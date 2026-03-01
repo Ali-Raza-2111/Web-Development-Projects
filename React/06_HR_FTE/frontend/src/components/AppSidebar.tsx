@@ -9,6 +9,7 @@ import {
   GraduationCap,
   BarChart3,
   Settings,
+  LogIn,
   Zap,
   ChevronDown,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import { ThemeToggle } from "./ui/theme-toggle";
 
 const primaryItems = [
   { to: "/", icon: LayoutDashboard, label: "Dashboard" },
+  { to: "/login-session", icon: LogIn, label: "Login Sessions" },
   { to: "/settings", icon: Settings, label: "Settings" },
 ];
 

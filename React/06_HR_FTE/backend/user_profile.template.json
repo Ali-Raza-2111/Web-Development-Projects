@@ -1,0 +1,11 @@
+{
+    "_comment": "Copy this file to user_profile.json and fill in your personal details.",
+    "name": "Muhammad Ali",
+    "email": "your-email@gmail.com",
+    "phone": "03001234567",
+    "address": "Faisalabad, Pakistan",
+    "postal_code": "38000",
+    "desired_salary": "80000",
+    "notification_email": "your-email@gmail.com",
+    "cover_letter": "I am very interested in this position and confident that my skills and experience make me an excellent candidate. I am a dedicated professional with a passion for delivering high-quality results. I look forward to the opportunity to contribute to your team."
+}

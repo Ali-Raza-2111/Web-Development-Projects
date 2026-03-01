@@ -2,26 +2,44 @@
 CareerOS Backend — FastAPI application.
 
 Endpoints:
-  POST /api/upload          — Upload resume, get session_id + parsed profile
-  GET  /api/pipeline/{id}   — SSE stream: runs the full pipeline with real-time events
-  GET  /api/status/{id}     — Get final pipeline results (poll-based alternative)
-  GET  /health              — Health check
+  POST /api/upload                       — Upload resume, get session_id + parsed profile
+  GET  /api/pipeline/{id}                — SSE stream: runs the full pipeline with real-time events
+  GET  /api/status/{id}                  — Get final pipeline results (poll-based alternative)
+  POST /api/command                      — Parse natural language command, return execution plan
+  GET  /api/apply/{session_id}/{job_idx} — SSE stream: run Playwright to apply to a matched job
+  GET  /health                           — Health check
 """
 from __future__ import annotations
 
 import asyncio
 import json
 import os
+import re
 import time
 import uuid
 from pathlib import Path
+from typing import Optional
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 import config
 from graph import pipeline, PipelineState
+from apply_worker import stream_apply
+from browser_manager import (
+    stream_login_session,
+    has_saved_session,
+    get_saved_sites,
+    is_login_active,
+    clear_session,
+    get_chrome_info,
+    launch_chrome_with_debugging,
+    stop_chrome_debugging,
+    is_chrome_running_with_debug,
+    LOGIN_URLS,
+)
 
 
 # ── App Setup ───────────────────────────────────────────────────────────────────
@@ -40,8 +58,76 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# In-memory session store (use Redis/DB in production)
-sessions: dict[str, dict] = {}
+# ── File-backed session store (persists across server restarts for 24 h) ──────
+
+def _session_path(session_id: str) -> Path:
+    """Return the JSON file path for a session."""
+    return config.SESSION_DIR / f"{session_id}.json"
+
+
+def _save_session(session_id: str, data: dict) -> None:
+    """Persist a session dict to disk."""
+    data["_updated_at"] = time.time()
+    if "_created_at" not in data:
+        data["_created_at"] = time.time()
+    with open(_session_path(session_id), "w") as f:
+        json.dump(data, f, default=str)
+
+
+def _load_session(session_id: str) -> dict | None:
+    """Load a session from disk. Returns None if missing or expired."""
+    p = _session_path(session_id)
+    if not p.exists():
+        return None
+    try:
+        with open(p) as f:
+            data = json.load(f)
+        # Check 24-hour expiry
+        created = data.get("_created_at", 0)
+        if time.time() - created > config.SESSION_TTL_HOURS * 3600:
+            p.unlink(missing_ok=True)
+            return None
+        return data
+    except Exception:
+        return None
+
+
+def _list_sessions() -> list[dict]:
+    """Return metadata for all non-expired sessions (most recent first)."""
+    results = []
+    now = time.time()
+    for p in config.SESSION_DIR.glob("*.json"):
+        try:
+            with open(p) as f:
+                data = json.load(f)
+            created = data.get("_created_at", 0)
+            if now - created > config.SESSION_TTL_HOURS * 3600:
+                p.unlink(missing_ok=True)
+                continue
+            results.append({
+                "session_id": p.stem,
+                "status": data.get("status", "unknown"),
+                "profile": data.get("profile"),
+                "created_at": created,
+                "has_result": data.get("result") is not None,
+            })
+        except Exception:
+            continue
+    results.sort(key=lambda x: x["created_at"], reverse=True)
+    return results
+
+
+def _cleanup_expired_sessions() -> None:
+    """Delete session files older than SESSION_TTL_HOURS."""
+    now = time.time()
+    for p in config.SESSION_DIR.glob("*.json"):
+        try:
+            with open(p) as f:
+                data = json.load(f)
+            if now - data.get("_created_at", 0) > config.SESSION_TTL_HOURS * 3600:
+                p.unlink(missing_ok=True)
+        except Exception:
+            pass
 
 
 # ── Endpoints ───────────────────────────────────────────────────────────────────
@@ -78,13 +164,13 @@ async def upload_resume(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(422, f"Could not parse resume: {str(e)}")
 
-    # Store session
-    sessions[session_id] = {
+    # Store session (persisted to disk)
+    _save_session(session_id, {
         "file_path": str(file_path),
         "profile": {k: v for k, v in profile.items() if k != "raw_text"},
         "status": "uploaded",
         "result": None,
-    }
+    })
 
     return {
         "session_id": session_id,
@@ -105,7 +191,7 @@ async def run_pipeline_sse(session_id: str):
     Run the full LangGraph pipeline and stream events via SSE.
     The frontend connects to this with EventSource.
     """
-    session = sessions.get(session_id)
+    session = _load_session(session_id)
     if not session:
         raise HTTPException(404, "Session not found. Upload a resume first.")
 
@@ -270,15 +356,19 @@ async def run_pipeline_sse(session_id: str):
                 "logs": final_state.get("logs", []),
             }
 
-            # Save to session
-            sessions[session_id]["result"] = result
-            sessions[session_id]["status"] = "completed"
+            # Save to session (persist to disk)
+            session_data = _load_session(session_id) or {}
+            session_data["result"] = result
+            session_data["status"] = "completed"
+            _save_session(session_id, session_data)
 
             yield _sse_event("pipeline_complete", result)
 
         except Exception as e:
             yield _sse_event("pipeline_error", {"error": str(e)})
-            sessions[session_id]["status"] = "error"
+            session_data = _load_session(session_id) or {}
+            session_data["status"] = "error"
+            _save_session(session_id, session_data)
 
     return StreamingResponse(
         event_stream(),
@@ -294,7 +384,7 @@ async def run_pipeline_sse(session_id: str):
 @app.get("/api/status/{session_id}")
 def get_status(session_id: str):
     """Get the current status and results for a session (poll-based)."""
-    session = sessions.get(session_id)
+    session = _load_session(session_id)
     if not session:
         raise HTTPException(404, "Session not found")
 
@@ -303,6 +393,264 @@ def get_status(session_id: str):
         "status": session["status"],
         "profile": session.get("profile"),
         "result": session.get("result"),
+    }
+
+
+@app.get("/api/sessions")
+def list_sessions():
+    """List all active sessions (within 24 h). Frontend uses this to restore on refresh."""
+    _cleanup_expired_sessions()
+    return {"sessions": _list_sessions()}
+
+
+@app.get("/api/sessions/latest")
+def get_latest_session():
+    """
+    Return the most recent session with full result data.
+    The frontend calls this on mount to restore state after a page refresh.
+    """
+    _cleanup_expired_sessions()
+    all_sessions = _list_sessions()
+    if not all_sessions:
+        raise HTTPException(404, "No active sessions")
+
+    latest = all_sessions[0]  # already sorted most-recent-first
+    session = _load_session(latest["session_id"])
+    if not session:
+        raise HTTPException(404, "Session expired")
+
+    return {
+        "session_id": latest["session_id"],
+        "status": session.get("status", "unknown"),
+        "profile": session.get("profile"),
+        "result": session.get("result"),
+    }
+
+
+# ── Command Endpoint ─────────────────────────────────────────────────────────────
+
+class CommandRequest(BaseModel):
+    command: str
+    session_id: Optional[str] = None
+
+
+@app.post("/api/command")
+async def parse_command(req: CommandRequest):
+    """
+    Parse a natural-language command and return a structured execution plan.
+    Tries to match the named job against the session's matched_jobs.
+    """
+    command = req.command.strip()
+    session_id = req.session_id
+
+    # -- Detect intent: apply --
+    apply_patterns = [
+        r"apply\s+to\s+(?:the\s+)?(.+?)(?:\s+at\s+(.+))?$",
+        r"apply\s+for\s+(?:the\s+)?(.+?)(?:\s+at\s+(.+))?$",
+        r"submit\s+(?:application|app)\s+(?:for\s+)?(.+?)(?:\s+at\s+(.+))?$",
+        r"send\s+(?:application|cv|resume)\s+(?:for\s+)?(.+?)(?:\s+at\s+(.+))?$",
+    ]
+
+    matched_title: Optional[str] = None
+    matched_company: Optional[str] = None
+
+    for pattern in apply_patterns:
+        m = re.search(pattern, command, re.IGNORECASE)
+        if m:
+            matched_title = m.group(1).strip() if m.group(1) else None
+            if m.lastindex is not None and m.lastindex >= 2:
+                matched_company = m.group(2).strip() if m.group(2) else None
+            break
+
+    if not matched_title:
+        # Return a generic plan so the UI still shows something
+        return {
+            "action": "unknown",
+            "message": "Command not recognised. Try: 'Apply to [job title]' or 'Apply to [job title] at [company]'.",
+            "plan": [],
+        }
+
+    # -- Try to find the job in the session --
+    job_index: Optional[int] = None
+    job_title = matched_title
+    company = matched_company or "Unknown Company"
+    job_url = ""
+    job_match_score = 0
+
+    if session_id:
+        session_data = _load_session(session_id)
+        if session_data:
+            result = session_data.get("result")
+        if result:
+            jobs = result.get("matched_jobs", [])
+            # Search by title (fuzzy: check if the command title appears in the job title)
+            for idx, job in enumerate(jobs):
+                if matched_title.lower() in job.get("title", "").lower():
+                    job_index = idx
+                    job_title = job.get("title", matched_title)
+                    company = job.get("company", company)
+                    job_url = job.get("url", "")
+                    job_match_score = job.get("match_score", 0)
+                    break
+                # Also check if company matches
+                if matched_company and matched_company.lower() in job.get("company", "").lower():
+                    job_index = idx
+                    job_title = job.get("title", matched_title)
+                    company = job.get("company", company)
+                    job_url = job.get("url", "")
+                    job_match_score = job.get("match_score", 0)
+                    break
+
+    return {
+        "action": "apply",
+        "job_title": job_title,
+        "company": company,
+        "job_url": job_url,
+        "job_index": job_index,
+        "match_score": job_match_score,
+        "session_id": session_id,
+        "steps": [
+            {"agent": "Browser Agent",   "task": f"Navigate to job posting: {job_url or 'URL not available'}",        "time": "~5s"},
+            {"agent": "Browser Agent",   "task": "Locate and click the Apply / Easy Apply button",         "time": "~5s"},
+            {"agent": "Form Filler",     "task": "Fill in personal info, upload resume, write cover letter","time": "~30s"},
+            {"agent": "Submit Agent",    "task": "Click Submit / Finish and confirm application",          "time": "~10s"},
+            {"agent": "Notifier",        "task": "Log application and send email confirmation",             "time": "~2s"},
+        ],
+        "estimated_time": "~1 min",
+        "risk": "Medium — CAPTCHA may require manual solve",
+    }
+
+
+# ── Apply Endpoint (SSE) ──────────────────────────────────────────────────────────
+
+@app.get("/api/apply/{session_id}/{job_index}")
+async def apply_to_job_stream(session_id: str, job_index: int):
+    """
+    SSE stream: launches Playwright to apply to the job at job_index
+    in the given session's matched_jobs list.
+    """
+    session = _load_session(session_id)
+    if not session:
+        raise HTTPException(404, "Session not found. Upload a resume first.")
+
+    result = session.get("result")
+    if not result:
+        raise HTTPException(400, "Pipeline has not completed yet for this session.")
+
+    matched_jobs = result.get("matched_jobs", [])
+    if job_index < 0 or job_index >= len(matched_jobs):
+        raise HTTPException(400, f"job_index {job_index} is out of range (0-{len(matched_jobs)-1}).")
+
+    job = matched_jobs[job_index]
+    job_url = job.get("url", "")
+    job_title = job.get("title", "Unknown Role")
+    company = job.get("company", "Unknown Company")
+
+    if not job_url:
+        raise HTTPException(400, "This job does not have a URL — cannot auto-apply.")
+
+    # Pass the resume-parsed profile so form fields are auto-filled from the CV
+    resume_profile = session.get("profile") or result.get("profile") or {}
+
+    return StreamingResponse(
+        stream_apply(job_url, job_title, company, profile=resume_profile),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+# ── Login Session Endpoints ────────────────────────────────────────────────────
+
+@app.get("/api/login/sites")
+def list_login_sites():
+    """Return the list of supported job sites and current session status."""
+    return {
+        "sites": [
+            {"id": k, "name": k.title(), "url": v}
+            for k, v in LOGIN_URLS.items()
+        ],
+        "has_session": has_saved_session(),
+        "login_active": is_login_active(),
+        "chrome_info": get_chrome_info(),
+    }
+
+
+@app.get("/api/login/status")
+def login_status():
+    """Check if a saved login session exists and if a login browser is currently open."""
+    return {
+        "has_session": has_saved_session(),
+        "login_active": is_login_active(),
+        "saved_sites": get_saved_sites(),
+        "chrome_debug_active": is_chrome_running_with_debug(),
+    }
+
+
+@app.get("/api/login/chrome-info")
+def chrome_info():
+    """Return detailed info about Chrome installation and debugging status."""
+    return get_chrome_info()
+
+
+class LoginRequest(BaseModel):
+    site: str = "indeed"
+    timeout_minutes: int = 5
+
+
+@app.post("/api/login/start")
+async def start_login_session(req: LoginRequest):
+    """
+    SSE stream: Opens the user's REAL Chrome so they can log in to a job site.
+    Uses Chrome DevTools Protocol — zero bot detection.
+    """
+    if is_login_active():
+        raise HTTPException(409, "A login browser session is already open. Close it first.")
+
+    return StreamingResponse(
+        stream_login_session(site=req.site, timeout_minutes=req.timeout_minutes),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+@app.post("/api/login/launch-chrome")
+def launch_chrome():
+    """Manually launch Chrome with remote debugging enabled."""
+    success, message = launch_chrome_with_debugging()
+    if success:
+        return {"status": "ok", "message": message}
+    raise HTTPException(400, message)
+
+
+@app.post("/api/login/stop-chrome")
+def stop_chrome():
+    """Stop the Chrome debugging process we launched."""
+    success, message = stop_chrome_debugging()
+    if success:
+        return {"status": "ok", "message": message}
+    raise HTTPException(400, message)
+
+
+@app.post("/api/login/clear")
+def clear_login_session():
+    """
+    Note: With real Chrome, clearing means the user should clear cookies
+    in Chrome itself (Ctrl+Shift+Delete). We cannot delete their real profile.
+    """
+    return {
+        "status": "info",
+        "message": (
+            "Since we use your real Chrome browser, please clear cookies directly "
+            "in Chrome: press Ctrl+Shift+Delete and select 'Cookies and other site data'."
+        ),
     }
 
 

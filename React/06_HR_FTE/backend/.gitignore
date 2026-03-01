@@ -1,6 +1,7 @@
 credentials.json
 user_profile.json
 browser_session/
+sessions/
 __pycache__/
 *.log
 history.json
