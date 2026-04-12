@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { SiPython, SiJavascript, SiReact, SiFastapi, SiOpenai, SiPostgresql, SiMongodb, SiGit } from 'react-icons/si';
+import { SiPython, SiJavascript, SiReact, SiFastapi, SiLanggraph, SiPostgresql, SiMongodb, SiGit } from 'react-icons/si';
 import { Card, CardContent } from '../ui/card';
 import Tilt from '../ui/Tilt';
 import { animate, stagger } from 'animejs';
@@ -9,7 +9,7 @@ const skills = [
   { name: "JavaScript", icon: SiJavascript, color: "#F7DF1E" },
   { name: "React", icon: SiReact, color: "#61DAFB" },
   { name: "FastAPI", icon: SiFastapi, color: "#009688" },
-  { name: "OpenAI", icon: SiOpenai, color: "#10A37F" },
+  { name: "LangGraph", icon: SiLanggraph, color: "#3776AB" },
   { name: "PostgreSQL", icon: SiPostgresql, color: "#336791" },
   { name: "MongoDB", icon: SiMongodb, color: "#47A248" },
   { name: "Git", icon: SiGit, color: "#F05032" },

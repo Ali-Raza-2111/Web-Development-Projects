@@ -11,6 +11,7 @@ const hackathons = [
 ];
 
 const certifications = [
+  { title: 'CS50 Puzzle Day 2026 Certificate', issuer: 'Harvard University', date: '2026', link: 'https://certificates.cs50.io/2a9dab24-4260-4a15-84c7-65ce0742feb4.pdf?size=letter' },
   { title: 'Microsoft Python Development', issuer: 'Microsoft', date: '2024', link: 'https://www.coursera.org/account/accomplishments/professional-cert/LZIF5AOB50BB' },
   { title: 'AI For Everyone', issuer: 'DeepLearning.AI', date: '2024', link: 'https://www.coursera.org/account/accomplishments/verify/UAVQHHC448GK' },
   { title: 'Agentic AI and AI Agents: A Primer for Leaders', issuer: 'Vanderbilt University', date: '2024', link: 'https://www.coursera.org/account/accomplishments/verify/3BELPC01IRJY' },

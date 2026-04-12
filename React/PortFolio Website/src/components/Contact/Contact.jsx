@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useForm } from '@formspree/react';
 import { Send, CheckCircle, Loader2 } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { Input } from '../ui/input';
@@ -8,10 +9,19 @@ import { animate, stagger } from 'animejs';
 
 const Contact = () => {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [state, handleSubmit] = useForm("mojyalkj");
+  const [showSuccess, setShowSuccess] = useState(false);
   const sectionRef = useRef(null);
   const formRef = useRef(null);
+
+  useEffect(() => {
+    if (state.succeeded) {
+      setFormState({ name: '', email: '', message: '' });
+      setShowSuccess(true);
+      const timer = setTimeout(() => setShowSuccess(false), 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [state.succeeded]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,9 +49,8 @@ const Contact = () => {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleCustomSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     
     // Animate button scale
     animate('.submit-btn', {
@@ -50,11 +59,7 @@ const Contact = () => {
         easing: 'easeInOutQuad'
     });
 
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormState({ name: '', email: '', message: '' });
-    setTimeout(() => setIsSubmitted(false), 3000);
+    handleSubmit(e);
   };
 
   return (
@@ -74,7 +79,7 @@ const Contact = () => {
 
         <form
           ref={formRef}
-          onSubmit={handleSubmit}
+          onSubmit={handleCustomSubmit}
           className="contact-anim opacity-0 space-y-6 bg-secondary/5 backdrop-blur-sm p-8 rounded-3xl border border-border/50 shadow-xl"
         >
           <div className="grid md:grid-cols-2 gap-6">
@@ -83,6 +88,7 @@ const Contact = () => {
               <Input
                 type="text"
                 id="name"
+                name="name"
                 required
                 value={formState.name}
                 onChange={(e) => setFormState({ ...formState, name: e.target.value })}
@@ -95,6 +101,7 @@ const Contact = () => {
               <Input
                 type="email"
                 id="email"
+                name="email"
                 required
                 value={formState.email}
                 onChange={(e) => setFormState({ ...formState, email: e.target.value })}
@@ -107,6 +114,7 @@ const Contact = () => {
             <label htmlFor="message" className="text-sm font-medium text-muted-foreground">Message</label>
             <Textarea
               id="message"
+              name="message"
               required
               rows={6}
               value={formState.message}
@@ -118,19 +126,24 @@ const Contact = () => {
 
           <Button
             type="submit"
-            disabled={isSubmitting}
+            disabled={state.submitting || showSuccess}
             className={cn(
               "submit-btn w-full py-6 text-base rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/25",
-              isSubmitted ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600" : "bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
+              showSuccess ? "bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600" : state.errors && state.errors.length > 0 ? "bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600" : "bg-gradient-to-r from-primary to-purple-600 hover:from-primary/90 hover:to-purple-600/90"
             )}
           >
-            {isSubmitting ? (
-              <Loader2 className="animate-spin mr-2" />
-            ) : isSubmitted ? (
+            {state.submitting ? (
+              <>
+                <Loader2 className="animate-spin mr-2" />
+                Sending...
+              </>
+            ) : showSuccess ? (
               <>
                 <CheckCircle size={20} className="mr-2" />
-                Message Sent
+                ✅ Message sent! I'll get back to you soon.
               </>
+            ) : state.errors && state.errors.length > 0 ? (
+              <>❌ Something went wrong. Please try again.</>
             ) : (
               <>
                 Send Message
